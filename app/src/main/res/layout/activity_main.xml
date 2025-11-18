@@ -11,16 +11,48 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
+        <!--        <FrameLayout-->
+<!--            android:id="@+id/flFragment"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"-->
+<!--            app:layout_constraintEnd_toEndOf="parent"-->
+<!--            app:layout_constraintHorizontal_bias="0.5"-->
+<!--            app:layout_constraintStart_toStartOf="parent"-->
+<!--            app:layout_constraintTop_toTopOf="parent" />-->
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="164dp"
+            android:layout_marginTop="81dp"
+            android:text="TextView"
+            android:textSize="20sp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
         <Button
             android:id="@+id/button"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="127dp"
-            android:layout_marginTop="287dp"
-            android:backgroundTint="@color/green_500"
+            android:layout_marginStart="136dp"
+            android:layout_marginTop="364dp"
+            android:backgroundTint="@color/brown_200"
             android:text="Button"
+            android:textSize="24sp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/bottomNavigationView"
+            android:layout_width="match_parent"
+            android:layout_height="75dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:menu="@menu/bottom_nav_menu"/>
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 
