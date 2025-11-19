@@ -7,64 +7,97 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        tools:layout_editor_absoluteX="190dp"
-        tools:layout_editor_absoluteY="283dp">
+    <!-- 教學內容（可捲動） -->
+    <ScrollView
+        android:id="@+id/scrollInstruct"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
-        <!--        <FrameLayout-->
-        <!--            android:id="@+id/flFragment"-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="0dp"-->
-        <!--            app:layout_constraintBottom_toTopOf="@+id/bottomNavigationView"-->
-        <!--            app:layout_constraintEnd_toEndOf="parent"-->
-        <!--            app:layout_constraintHorizontal_bias="0.5"-->
-        <!--            app:layout_constraintStart_toStartOf="parent"-->
-        <!--            app:layout_constraintTop_toTopOf="parent" />-->
-
-        <TextView
-            android:id="@+id/textView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="164dp"
-            android:layout_marginTop="81dp"
-            android:text="TextView"
-            android:textSize="20sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <VideoView
-            android:id="@+id/videoView"
-            android:layout_width="367dp"
-            android:layout_height="275dp"
-            android:layout_marginStart="25dp"
-            android:layout_marginTop="48dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView" />
-
-        <Button
-            android:id="@+id/button"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="136dp"
-            android:layout_marginTop="464dp"
-            android:backgroundTint="@color/brown_200"
-            android:text="Button"
-            android:textSize="24sp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
-
-        <com.google.android.material.bottomnavigation.BottomNavigationView
-            android:id="@+id/bottomNavigationView"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="75dp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.5"
-            app:layout_constraintStart_toStartOf="parent"
-            app:menu="@menu/bottom_nav_menu" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="16dp">
 
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <!-- 標題 -->
+            <TextView
+                android:id="@+id/tvInstructionTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="如何使用信運草？"
+                android:textSize="20sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="16dp" />
+
+            <!-- 步驟 1 -->
+            <TextView
+                android:id="@+id/tvStep1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1. 在首頁點選「寫一封給未來的自己」。"
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- 步驟 2 -->
+            <TextView
+                android:id="@+id/tvStep2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2. 設定收信日期，輸入主旨與內容。"
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- 步驟 3 -->
+            <TextView
+                android:id="@+id/tvStep3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="3. 點擊「送出」後，信件會儲存到系統並排程提醒。"
+                android:textSize="16sp"
+                android:layout_marginBottom="12dp" />
+
+            <!-- 步驟 4 -->
+            <TextView
+                android:id="@+id/tvStep4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="4. 可在「收信總覽」查看即將收到的信件。"
+                android:textSize="16sp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- 教學影片標題 -->
+            <TextView
+                android:id="@+id/tvVideoTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="教學影片"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <!-- 教學影片區（之後 D 可以在 Kotlin 裡對這個 VideoView 設定來源） -->
+            <VideoView
+                android:id="@+id/videoTutorial"
+                android:layout_width="match_parent"
+                android:layout_height="200dp"
+                android:layout_marginBottom="16dp" />
+
+        </LinearLayout>
+    </ScrollView>
+
+    <!-- 底部導覽列 -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="0dp"
+        android:layout_height="75dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
