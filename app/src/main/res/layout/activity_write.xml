@@ -89,13 +89,27 @@
                 android:inputType="textMultiLine"
                 android:layout_marginBottom="16dp" />
 
-            <!-- 送出按鈕 -->
-            <Button
-                android:id="@+id/btnSend"
-                android:layout_width="wrap_content"
+            <!-- 送出 / 退出 按鈕區：兩個並排 -->
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="送出"
-                android:layout_gravity="center_horizontal" />
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/btnSend"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="送出"
+                    android:layout_marginEnd="16dp" />
+
+                <Button
+                    android:id="@+id/btnExit"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="退出" />
+            </LinearLayout>
 
         </LinearLayout>
     </ScrollView>
