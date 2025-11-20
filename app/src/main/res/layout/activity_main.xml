@@ -7,15 +7,67 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <!-- 上方內容容器：之後放各個畫面的 Fragment -->
-    <FrameLayout
-        android:id="@+id/flFragment"
+    <!-- 上方內容：首頁主畫面 -->
+    <ScrollView
+        android:id="@+id/scrollHome"
         android:layout_width="0dp"
         android:layout_height="0dp"
+        android:fillViewport="true"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:padding="24dp">
+
+            <!-- App 標題 -->
+            <TextView
+                android:id="@+id/tvAppTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="信運草"
+                android:textSize="26sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="12dp" />
+
+            <!-- 引文（長版） -->
+            <TextView
+                android:id="@+id/tvQuote"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="生活總是匆匆向前走，有時我們來不及停下腳步，\n好好聽聽自己此刻的心情。\n\n於是，我們把那些想說的話、想記住的瞬間、\n還有努力生活的痕跡交給時間。\n\n寫下一封給未來自己的信，\n或許是提醒、是期待、是願望、\n也可能只是想告訴未來的自己：\n——你一路走到這裡，真的很不容易。\n\n當某一天通知響起，\n那封來自過去的心意將再次被打開，\n提醒你：你一直在成長，也一直在陪伴自己。"
+                android:textSize="16sp"
+                android:lineSpacingExtra="4dp"
+                android:layout_marginBottom="24dp" />
+
+            <!-- 按鈕區：並排 -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                android:layout_marginTop="8dp">
+
+                <Button
+                    android:id="@+id/btnGoWrite"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="開始寫信"
+                    android:layout_marginEnd="16dp" />
+
+                <Button
+                    android:id="@+id/btnGoTutorial"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="操作教學" />
+            </LinearLayout>
+
+        </LinearLayout>
+    </ScrollView>
 
     <!-- 底部導覽列 -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
