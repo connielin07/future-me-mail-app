@@ -64,6 +64,14 @@
                     android:text="收信日期"
                     android:textSize="16sp" />
 
+                <TextView
+                    android:id="@+id/tvReceiveDate"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:text="2025-01-01"
+                    android:textSize="16sp" />
+
                 <Button
                     android:id="@+id/btnPickReceiveDate"
                     android:layout_width="wrap_content"
