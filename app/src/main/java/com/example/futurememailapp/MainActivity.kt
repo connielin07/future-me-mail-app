@@ -5,6 +5,9 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import android.content.Intent
+import android.widget.Button
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -15,6 +18,24 @@ class MainActivity : AppCompatActivity() {
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
             insets
+        }
+
+        // --- 按鈕跳轉寫信頁 ---
+        val btnGoWrite = findViewById<Button>(R.id.btnGoWrite)
+        btnGoWrite.setOnClickListener {
+            startActivity(Intent(this, WriteActivity::class.java))
+        }
+
+        // --- 底部導覽列跳轉 ---
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav3 -> {
+                    startActivity(Intent(this, WriteActivity::class.java))
+                    true
+                }
+                else -> true
+            }
         }
     }
 }
