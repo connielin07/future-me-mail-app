@@ -8,7 +8,12 @@ import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
+import android.widget.Toast
+import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.futurememailapp.network.FutureMailApi
+import com.example.futurememailapp.network.model.FutureMailRequest
+import kotlinx.coroutines.launch
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -20,6 +25,10 @@ class WriteActivity : AppCompatActivity() {
     private lateinit var btnPickReceiveDate: Button
     private lateinit var etTitle: EditText
     private lateinit var etContent: EditText
+    private lateinit var btnSend: Button
+    private lateinit var btnExit: Button
+
+    private val futureMailService by lazy { FutureMailApi.service }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,6 +41,8 @@ class WriteActivity : AppCompatActivity() {
         btnPickReceiveDate = findViewById(R.id.btnPickReceiveDate)
         etTitle = findViewById(R.id.etTitle)
         etContent = findViewById(R.id.etContent)
+        btnSend = findViewById(R.id.btnSend)
+        btnExit = findViewById(R.id.btnExit)
 
         // --- 1. 預設寫信日期為今天 ---
         val today = Calendar.getInstance()
@@ -52,6 +63,9 @@ class WriteActivity : AppCompatActivity() {
             }, year, month, day)
             dpd.show()
         }
+
+        btnSend.setOnClickListener { submitLetter() }
+        btnExit.setOnClickListener { finish() }
 
         // --- 底部導覽列 ---
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
@@ -77,5 +91,58 @@ class WriteActivity : AppCompatActivity() {
                 else -> false
             }
         }
+    }
+
+    private fun submitLetter() {
+        val writeDate = tvWriteDate.text.toString()
+        val receiveDate = tvReceiveDate.text.toString()
+        val subject = etTitle.text.toString().trim()
+        val content = etContent.text.toString().trim()
+
+        if (subject.isEmpty()) {
+            Toast.makeText(this, "請輸入信件主旨", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (content.isEmpty()) {
+            Toast.makeText(this, "請輸入信件內容", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        if (receiveDate.isEmpty()) {
+            Toast.makeText(this, "請選擇收信日期", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        lifecycleScope.launch {
+            toggleSendEnabled(false)
+            val request = FutureMailRequest(
+                writeDate = writeDate,
+                receiveDate = receiveDate,
+                subject = subject,
+                content = content
+            )
+
+            val toastMessage = try {
+                val response = futureMailService.submitMail(request)
+                if (response.isSuccessful) {
+                    etTitle.text?.clear()
+                    etContent.text?.clear()
+                    "信件已儲存至後端"
+                } else {
+                    "儲存失敗：${response.code()}"
+                }
+            } catch (e: Exception) {
+                "儲存失敗：${e.localizedMessage}"
+            }
+
+            Toast.makeText(this@WriteActivity, toastMessage, Toast.LENGTH_SHORT).show()
+            toggleSendEnabled(true)
+        }
+    }
+
+    private fun toggleSendEnabled(enabled: Boolean) {
+        btnSend.isEnabled = enabled
+        btnPickReceiveDate.isEnabled = enabled
     }
 }
