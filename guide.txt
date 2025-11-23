@@ -1,0 +1,63 @@
+FutureMe 後端部署待辦
+=======================
+
+0. 修正檔案權限（若曾以 root 部署）
+   - `sudo chown -R connie:connie /home/connie/FutureMeMailApp/server`
+   - 沒有正確權限會導致 `npm install` 無法寫入 `package-lock.json` 或 `node_modules`。
+
+1. 安裝/驗證 Node 依賴  
+   - 進入後端目錄：`cd ~/FutureMeMailApp/server`  
+   - 安裝套件：`npm install`（包含 express、mysql2…）。  
+   - 建立環境檔：`cp .env.example .env` 後填入 `PORT`, `DB_*`, `SMTP_*`；`DB_PASS` 必須與資料庫實際密碼一致。
+
+2. 確認 MariaDB 設定  
+   - 以 `sudo mysql` 建立資料庫與使用者（並設定與 `.env` 相同的密碼）：  
+     ```
+     CREATE DATABASE futureme DEFAULT CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+     CREATE USER 'futureme'@'localhost' IDENTIFIED BY '<strong-password>';
+     GRANT ALL PRIVILEGES ON futureme.* TO 'futureme'@'localhost';
+     FLUSH PRIVILEGES;
+     ```  
+   - 建表：  
+     ```
+     USE futureme;
+     CREATE TABLE future_mail (
+       id CHAR(36) PRIMARY KEY,
+       write_date DATE NOT NULL,
+       receive_date DATE NOT NULL,
+       subject VARCHAR(255) NOT NULL,
+       content TEXT NOT NULL,
+       email VARCHAR(255),
+       delivered TINYINT(1) DEFAULT 0,
+       created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+     );
+     ```
+
+3. 測試 Node API  
+   - 啟動服務：`npm run dev` 或 `pm2 start src/index.js --name futureme-api`  
+   - 在 VPS 內部測試：  
+     ```
+     curl -X POST http://127.0.0.1:8080/api/future-mails \
+       -H "Content-Type: application/json" \
+       --data-binary '{"writeDate":"2025-01-01","receiveDate":"2025-12-31","subject":"test","content":"hello","email":"you@example.com"}'
+     ```
+     （請保持 JSON 為單行或使用 `--data-binary @payload.json`，避免換行造成 `Bad control character` 錯誤。）
+
+4. 設定 Nginx 反向代理  
+   - 需以 sudo 編輯 `/etc/nginx/sites-enabled/futuremail.cocotoget.com`，加入 API 反向代理：  
+     ```
+     location /api/ {
+         proxy_pass http://127.0.0.1:8080/;
+         proxy_set_header Host $host;
+         proxy_set_header X-Real-IP $remote_addr;
+         proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+         proxy_set_header X-Forwarded-Proto $scheme;
+     }
+     ```  
+   - 測試並重新載入：`sudo nginx -t && sudo systemctl reload nginx`。  
+   - 從外部測試：`curl https://futuremail.cocotoget.com/api/future-mails ...`
+
+5. 常駐與監控  
+   - 啟動：`pm2 start src/index.js --name futureme-api --cwd ~/FutureMeMailApp/server`  
+   - 儲存並設定開機自動啟動：`pm2 save` 後執行 `sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u connie --hp /home/connie`  
+   - 監控：`pm2 status`、`pm2 logs futureme-api`、`mysql -u futureme -p futureme -e "SELECT COUNT(*) FROM future_mail;"`。
