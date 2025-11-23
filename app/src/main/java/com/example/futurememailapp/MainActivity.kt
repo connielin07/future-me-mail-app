@@ -35,11 +35,22 @@ class MainActivity : AppCompatActivity() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav3 -> {
+                R.id.nav1 -> { // Home（當前頁，不跳）
+                    true
+                }
+                R.id.nav2 -> { // Instruct
+                    startActivity(Intent(this, InstructActivity::class.java))
+                    true
+                }
+                R.id.nav3 -> { // Write
                     startActivity(Intent(this, WriteActivity::class.java))
                     true
                 }
-                else -> true
+                R.id.nav4 -> { // Overview
+                    startActivity(Intent(this, OverviewActivity::class.java))
+                    true
+                }
+                else -> false
             }
         }
     }
