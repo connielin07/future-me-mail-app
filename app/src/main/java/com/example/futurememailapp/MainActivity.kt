@@ -25,6 +25,11 @@ class MainActivity : AppCompatActivity() {
         btnGoWrite.setOnClickListener {
             startActivity(Intent(this, WriteActivity::class.java))
         }
+        // --- 按鈕跳轉操作教學頁 ---
+        val btnGoTutorial = findViewById<Button>(R.id.btnGoTutorial)
+        btnGoTutorial.setOnClickListener {
+            startActivity(Intent(this, InstructActivity::class.java))
+        }
 
         // --- 底部導覽列跳轉 ---
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
