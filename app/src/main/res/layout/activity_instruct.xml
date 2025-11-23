@@ -2,12 +2,11 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MainActivity">
+    tools:context=".InstructActivity">
 
-    <!-- 教學內容（可捲動） -->
+    <!-- 可捲動內容：教學文字 + 教學影片 -->
     <ScrollView
         android:id="@+id/scrollInstruct"
         android:layout_width="0dp"
@@ -22,51 +21,52 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:padding="16dp">
+            android:padding="20dp">
 
-            <!-- 標題 -->
+            <!-- 主標題 -->
             <TextView
                 android:id="@+id/tvInstructionTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="如何使用信運草？"
-                android:textSize="20sp"
+                android:text="操作教學：使用信運草Tips"
+                android:textSize="22sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="20dp" />
 
-            <!-- 步驟 1 -->
+            <!-- 次標題：如何撰寫信件？ -->
             <TextView
-                android:id="@+id/tvStep1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="1. 在首頁點選「寫一封給未來的自己」。"
+                android:text="如何撰寫信件？"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="1. 在首頁點選「開始寫信」進入寫信頁面。
+                \n\n2. 設定寄送日期，輸入主旨與內容。
+                \n\n3. 點擊「送出」後，信件會儲存到系統並排程提醒。
+                \n\n4. 可在「收信總覽」的月曆上查看即將收到的信件。"
                 android:textSize="16sp"
-                android:layout_marginBottom="12dp" />
+                android:layout_marginBottom="24dp" />
 
-            <!-- 步驟 2 -->
+            <!-- 次標題：如何收信？ -->
             <TextView
-                android:id="@+id/tvStep2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="2. 設定收信日期，輸入主旨與內容。"
-                android:textSize="16sp"
-                android:layout_marginBottom="12dp" />
+                android:text="如何收信？"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_marginBottom="8dp" />
 
-            <!-- 步驟 3 -->
             <TextView
-                android:id="@+id/tvStep3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="3. 點擊「送出」後，信件會儲存到系統並排程提醒。"
-                android:textSize="16sp"
-                android:layout_marginBottom="12dp" />
-
-            <!-- 步驟 4 -->
-            <TextView
-                android:id="@+id/tvStep4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="4. 可在「收信總覽」查看即將收到的信件。"
+                android:text="1. 到達收信日當天，手機會跳出收信通知。
+                \n\n2. 開啟 APP 進入「收信總覽」。
+                \n\n3. 可在信箱查看已送達的信件，點開即可閱讀。"
                 android:textSize="16sp"
                 android:layout_marginBottom="24dp" />
 
@@ -78,23 +78,25 @@
                 android:text="教學影片"
                 android:textSize="18sp"
                 android:textStyle="bold"
-                android:layout_marginBottom="8dp" />
+                android:layout_marginBottom="12dp" />
 
-            <!-- 教學影片區（之後 D 可以在 Kotlin 裡對這個 VideoView 設定來源） -->
+            <!-- 教學影片 (位置在中間、可捲動到) -->
             <VideoView
                 android:id="@+id/videoTutorial"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginBottom="16dp" />
+                android:layout_height="220dp"
+                android:background="#000000"
+                android:layout_marginBottom="30dp" />
 
         </LinearLayout>
     </ScrollView>
 
-    <!-- 底部導覽列 -->
+    <!-- 底部導覽列（永遠固定） -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
         android:layout_height="75dp"
+        android:background="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
