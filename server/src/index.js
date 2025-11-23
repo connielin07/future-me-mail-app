@@ -42,7 +42,7 @@ app.post("/api/future-mails", async (req, res) => {
     subject,
     content,
     email: email || null,
-    createdAt: new Date().toISOString()
+    createdAt: new Date()
   };
 
   try {
