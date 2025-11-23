@@ -99,6 +99,15 @@
                 android:inputType="textMultiLine"
                 android:layout_marginBottom="16dp" />
 
+            <!-- Email -->
+            <EditText
+                android:id="@+id/etEmail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="收信人 Email（可選）"
+                android:inputType="textEmailAddress"
+                android:layout_marginBottom="16dp" />
+
             <!-- 送出 / 退出 按鈕區：兩個並排 -->
             <LinearLayout
                 android:layout_width="match_parent"

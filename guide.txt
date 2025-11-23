@@ -42,6 +42,7 @@ FutureMe 後端部署待辦
        --data-binary '{"writeDate":"2025-01-01","receiveDate":"2025-12-31","subject":"test","content":"hello","email":"you@example.com"}'
      ```
      （請保持 JSON 為單行或使用 `--data-binary @payload.json`，避免換行造成 `Bad control character` 錯誤。）
+   - Android 端（`activity_write.xml`）必須將「寫信日期」、「收信日期」、「信件主旨」、「內文（etContent）」與可選的 `email` 組成上述 JSON，POST 到 `/api/future-mails`，後端才會寫入資料庫。
 
 4. 設定 Nginx 反向代理  
    - 需以 sudo 編輯 `/etc/nginx/sites-enabled/futuremail.cocotoget.com`，加入 API 反向代理：  

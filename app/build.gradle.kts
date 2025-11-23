@@ -21,7 +21,7 @@ android {
 
     buildTypes {
         debug {
-            buildConfigField("String", "BACKEND_BASE_URL", "\"http://10.0.2.2:8080/\"")
+            buildConfigField("String", "BACKEND_BASE_URL", "\"https://futuremail.cocotoget.com/\"")
         }
         release {
             isMinifyEnabled = false
@@ -29,7 +29,7 @@ android {
                 getDefaultProguardFile("proguard-android-optimize.txt"),
                 "proguard-rules.pro"
             )
-            buildConfigField("String", "BACKEND_BASE_URL", "\"http://10.0.2.2:8080/\"")
+            buildConfigField("String", "BACKEND_BASE_URL", "\"https://futuremail.cocotoget.com/\"")
         }
     }
     compileOptions {

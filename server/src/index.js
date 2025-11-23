@@ -24,7 +24,7 @@ const pool = mysql.createPool({
   timezone: "Z"
 });
 
-app.get("/health", (_, res) => {
+app.get(["/health", "/api/health"], (_, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 

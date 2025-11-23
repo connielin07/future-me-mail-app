@@ -9,6 +9,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.widget.Toast
+import android.util.Patterns
 import androidx.lifecycle.lifecycleScope
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.futurememailapp.network.FutureMailApi
@@ -25,6 +26,7 @@ class WriteActivity : AppCompatActivity() {
     private lateinit var btnPickReceiveDate: Button
     private lateinit var etTitle: EditText
     private lateinit var etContent: EditText
+    private lateinit var etEmail: EditText
     private lateinit var btnSend: Button
     private lateinit var btnExit: Button
 
@@ -41,6 +43,7 @@ class WriteActivity : AppCompatActivity() {
         btnPickReceiveDate = findViewById(R.id.btnPickReceiveDate)
         etTitle = findViewById(R.id.etTitle)
         etContent = findViewById(R.id.etContent)
+        etEmail = findViewById(R.id.etEmail)
         btnSend = findViewById(R.id.btnSend)
         btnExit = findViewById(R.id.btnExit)
 
@@ -100,6 +103,8 @@ class WriteActivity : AppCompatActivity() {
         val receiveDate = tvReceiveDate.text.toString()
         val subject = etTitle.text.toString().trim()
         val content = etContent.text.toString().trim()
+        val emailRaw = etEmail.text.toString().trim()
+        val email = emailRaw.ifEmpty { null }
 
         if (subject.isEmpty()) {
             Toast.makeText(this, "請輸入信件主旨", Toast.LENGTH_SHORT).show()
@@ -116,13 +121,19 @@ class WriteActivity : AppCompatActivity() {
             return
         }
 
+        if (!email.isNullOrEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
+            Toast.makeText(this, "Email 格式不正確", Toast.LENGTH_SHORT).show()
+            return
+        }
+
         lifecycleScope.launch {
             toggleSendEnabled(false)
             val request = FutureMailRequest(
                 writeDate = writeDate,
                 receiveDate = receiveDate,
                 subject = subject,
-                content = content
+                content = content,
+                email = email
             )
 
             val toastMessage = try {
@@ -130,6 +141,7 @@ class WriteActivity : AppCompatActivity() {
                 if (response.isSuccessful) {
                     etTitle.text?.clear()
                     etContent.text?.clear()
+                    etEmail.text?.clear()
                     "信件已儲存至後端"
                 } else {
                     "儲存失敗：${response.code()}"
