@@ -33,6 +33,10 @@ class MainActivity : AppCompatActivity() {
 
         // --- 底部導覽列跳轉 ---
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+
+        // 預設選中 Main 頁（亮起）
+        bottomNavigationView.selectedItemId = R.id.nav1
+
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
                 R.id.nav1 -> { // Home（當前頁，不跳）

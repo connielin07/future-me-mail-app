@@ -1,10 +1,12 @@
 package com.example.futurememailapp
 
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.widget.MediaController
 import android.widget.VideoView
 import androidx.appcompat.app.AppCompatActivity
+import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class InstructActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -24,5 +26,30 @@ class InstructActivity : AppCompatActivity() {
         videoView.setVideoURI(uri)
         videoView.setOnPreparedListener { it.isLooping = true }
         videoView.start()
+
+        // --- 底部導覽列跳轉 ---
+        val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        // 預設選中 Instruct 頁（亮起）
+        bottomNavigationView.selectedItemId = R.id.nav2
+        bottomNavigationView.setOnItemSelectedListener { item ->
+            when (item.itemId) {
+                R.id.nav1 -> { // Home
+                    startActivity(Intent(this, MainActivity::class.java))
+                    true
+                }
+                R.id.nav2 -> { // Instruct（當前頁，不跳）
+                    true
+                }
+                R.id.nav3 -> { // Write
+                    startActivity(Intent(this, WriteActivity::class.java))
+                    true
+                }
+                R.id.nav4 -> { // Overview
+                    startActivity(Intent(this, OverviewActivity::class.java))
+                    true
+                }
+                else -> false
+            }
+        }
     }
 }

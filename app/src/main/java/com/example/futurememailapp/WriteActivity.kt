@@ -79,13 +79,15 @@ class WriteActivity : AppCompatActivity() {
                     startActivity(Intent(this, MainActivity::class.java))
                     true
                 }
-                R.id.nav2 -> { // Instruct (先放著空的，以後再做)
+                R.id.nav2 -> { // Instruct
+                    startActivity(Intent(this, InstructActivity::class.java))
                     true
                 }
-                R.id.nav3 -> { // Write（當前頁，不跳）
+                R.id.nav3 -> { // Write（當前頁，不跳轉）
                     true
                 }
-                R.id.nav4 -> { // Overview（之後要做的頁面）
+                R.id.nav4 -> { // Overview
+                    startActivity(Intent(this, OverviewActivity::class.java))
                     true
                 }
                 else -> false
