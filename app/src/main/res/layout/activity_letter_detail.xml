@@ -40,6 +40,14 @@
                 tools:text="給十年後自己的信" />
 
             <TextView
+                android:id="@+id/detailWriteDateTextView"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:textColor="@android:color/darker_gray"
+                tools:text="寫於: 2024-05-20" />
+
+            <TextView
                 android:id="@+id/detailDeliveryDateTextView"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

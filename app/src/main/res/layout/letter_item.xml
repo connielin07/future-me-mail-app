@@ -10,7 +10,7 @@
         android:id="@+id/letterSubjectTextView"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:textSize="16sp"
+        android:textSize="18sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toStartOf="@+id/deliveryDateTextView"
         app:layout_constraintStart_toStartOf="parent"
@@ -18,12 +18,24 @@
         tools:text="給十年後自己的信" />
 
     <TextView
+        android:id="@+id/writeDateTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="4dp"
+        android:textColor="@android:color/darker_gray"
+        android:textSize="14sp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/letterSubjectTextView"
+        tools:text="寫於: 2024-05-20" />
+
+    <TextView
         android:id="@+id/deliveryDateTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:textColor="@android:color/darker_gray"
-        app:layout_constraintBaseline_toBaselineOf="@+id/letterSubjectTextView"
+        android:textColor="@android:color/holo_green_dark"
+        android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        tools:text="2034-12-25" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:text="寄送: 2034-12-25" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
