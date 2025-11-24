@@ -7,14 +7,24 @@
     android:layout_height="match_parent"
     tools:context=".InstructActivity">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_instruct"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:title="操作教學"
+        app:titleTextColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <!-- 可捲動內容：教學文字 + 教學影片 -->
     <ScrollView
         android:id="@+id/scrollInstruct"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constrainedHeight="true"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_instruct"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -24,16 +34,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
-
-            <!-- 主標題 -->
-            <TextView
-                android:id="@+id/tvInstructionTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="操作教學：使用信運草Tips"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="20dp" />
 
             <!-- 次標題：如何撰寫信件？ -->
             <TextView

@@ -7,13 +7,24 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/toolbar_main"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="?attr/colorPrimary"
+        app:title="信運草"
+        app:titleTextColor="?attr/colorOnPrimary"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
     <!-- 上方內容：首頁主畫面 -->
     <ScrollView
         android:id="@+id/scrollHome"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolbar_main"
         app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
@@ -23,16 +34,6 @@
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="24dp">
-
-            <!-- App 標題 -->
-            <TextView
-                android:id="@+id/tvAppTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="信運草"
-                android:textSize="26sp"
-                android:textStyle="bold"
-                android:layout_marginBottom="12dp" />
 
             <!-- 引文（長版） -->
             <TextView

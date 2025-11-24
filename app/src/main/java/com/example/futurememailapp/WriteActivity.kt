@@ -5,12 +5,12 @@ import android.os.Bundle
 import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.widget.Toast
 import android.util.Patterns
 import androidx.lifecycle.lifecycleScope
+import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.example.futurememailapp.network.FutureMailApi
 import com.example.futurememailapp.network.model.FutureMailRequest
@@ -34,8 +34,11 @@ class WriteActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.activity_write)
+
+        // 1. 找到並啟用我們自己的 Toolbar
+        val toolbar: MaterialToolbar = findViewById(R.id.toolbar_write)
+        setSupportActionBar(toolbar)
 
         // --- 初始化 View ---
         tvWriteDate = findViewById(R.id.tvWriteDate)
@@ -47,12 +50,12 @@ class WriteActivity : AppCompatActivity() {
         btnSend = findViewById(R.id.btnSend)
         btnExit = findViewById(R.id.btnExit)
 
-        // --- 1. 預設寫信日期為今天 ---
+        // --- 預設寫信日期為今天 ---
         val today = Calendar.getInstance()
         val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
         tvWriteDate.text = sdf.format(today.time)
 
-        // --- 2. 選擇收信日期（DatePicker） ---
+        // --- 選擇收信日期（DatePicker） ---
         btnPickReceiveDate.setOnClickListener {
             val c = Calendar.getInstance()
             val year = c.get(Calendar.YEAR)
@@ -60,8 +63,7 @@ class WriteActivity : AppCompatActivity() {
             val day = c.get(Calendar.DAY_OF_MONTH)
 
             val dpd = DatePickerDialog(this, { _, selectedYear, selectedMonth, selectedDay ->
-                // month 從 0 開始，所以要 +1
-                val dateStr = String.format("%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
+                val dateStr = String.format(Locale.getDefault(), "%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
                 tvReceiveDate.text = dateStr
             }, year, month, day)
             dpd.show()
@@ -72,29 +74,22 @@ class WriteActivity : AppCompatActivity() {
 
         // --- 底部導覽列 ---
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-
-        // 預設選中 Write 頁（避免顯示在 Home）
         bottomNavigationView.selectedItemId = R.id.nav3
 
         bottomNavigationView.setOnItemSelectedListener { item ->
-            when (item.itemId) {
-                R.id.nav1 -> { // Home
-                    startActivity(Intent(this, MainActivity::class.java))
-                    true
+            if (item.itemId != bottomNavigationView.selectedItemId) {
+                val intent = when (item.itemId) {
+                    R.id.nav1 -> Intent(this, MainActivity::class.java)
+                    R.id.nav2 -> Intent(this, InstructActivity::class.java)
+                    R.id.nav4 -> Intent(this, OverviewActivity::class.java)
+                    else -> null
                 }
-                R.id.nav2 -> { // Instruct
-                    startActivity(Intent(this, InstructActivity::class.java))
-                    true
+                intent?.let {
+                    it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
+                    startActivity(it)
                 }
-                R.id.nav3 -> { // Write（當前頁，不跳轉）
-                    true
-                }
-                R.id.nav4 -> { // Overview
-                    startActivity(Intent(this, OverviewActivity::class.java))
-                    true
-                }
-                else -> false
             }
+            true
         }
     }
 
@@ -138,7 +133,8 @@ class WriteActivity : AppCompatActivity() {
 
             val toastMessage = try {
                 val response = futureMailService.submitMail(request)
-                if (response.isSuccessful) {
+                // 修正 Error: 必須使用 .code() 函式
+                if (response.code() in 200..299) {
                     etTitle.text?.clear()
                     etContent.text?.clear()
                     etEmail.text?.clear()
