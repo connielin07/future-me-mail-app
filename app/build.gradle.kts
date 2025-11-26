@@ -58,4 +58,8 @@ dependencies {
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     implementation("com.google.android.material:material:1.12.0")
+    // 日曆庫
+    implementation("io.github.prolificinteractive:material-calendarview:2.0.1")
+    // 日曆庫需要的日期時間函式庫
+    implementation("com.jakewharton.threetenabp:threetenabp:1.4.0")
 }
