@@ -6,16 +6,26 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.ImageView
+import android.widget.ProgressBar
 import android.widget.TextView
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.isVisible
+import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.futurememailapp.network.FutureMailApi
+import com.example.futurememailapp.network.model.MailsResponse
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
+import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
@@ -23,15 +33,17 @@ import org.threeten.bp.format.DateTimeFormatter
 data class Letter(
     val subject: String,
     val writeDate: String, 
-    val deliveryDate: String
+    val deliveryDate: String,
+    var isRead: Boolean = false
 )
 
 class LetterAdapter(
     private val letters: List<Letter>,
-    private val onItemClicked: (Letter) -> Unit
+    private val onItemClicked: (Letter, Int) -> Unit
 ) : RecyclerView.Adapter<LetterAdapter.LetterViewHolder>() {
 
     class LetterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
+        val unreadDotImageView: ImageView = itemView.findViewById(R.id.unreadDotImageView)
         val subjectTextView: TextView = itemView.findViewById(R.id.letterSubjectTextView)
         val writeDateTextView: TextView = itemView.findViewById(R.id.writeDateTextView)
         val deliveryDateTextView: TextView = itemView.findViewById(R.id.deliveryDateTextView)
@@ -50,9 +62,10 @@ class LetterAdapter(
         holder.subjectTextView.text = letter.subject
         holder.writeDateTextView.text = "寫於: ${letter.writeDate}"
         holder.deliveryDateTextView.text = "寄送: ${letter.deliveryDate}"
+        holder.unreadDotImageView.visibility = if (letter.isRead) View.INVISIBLE else View.VISIBLE
 
         holder.itemView.setOnClickListener {
-            onItemClicked(letter)
+            onItemClicked(letter, holder.adapterPosition)
         }
     }
 }
@@ -75,7 +88,14 @@ class OverviewActivity : AppCompatActivity() {
 
     private lateinit var calendarView: MaterialCalendarView
     private lateinit var recyclerView: RecyclerView
+    private lateinit var btnSort: Button
+    private lateinit var progressBar: ProgressBar
+    private lateinit var emptyView: TextView
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
+    private val futureMailService by lazy { FutureMailApi.service }
+
+    private var allLetters: List<Letter> = emptyList() 
+    private var currentSortIndex = 0 
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -84,39 +104,69 @@ class OverviewActivity : AppCompatActivity() {
         // 初始化畫面元件
         calendarView = findViewById(R.id.calendarView)
         recyclerView = findViewById(R.id.lettersRecyclerView)
+        btnSort = findViewById(R.id.btnSort)
+        progressBar = findViewById(R.id.progressBar)
+        emptyView = findViewById(R.id.emptyView)
 
-        // 讀取資料並更新畫面
-        val letters = loadLetters()
-        setupCalendar(letters)
-        setupRecyclerView(letters)
+        btnSort.setOnClickListener { showSortDialog() }
 
-        // 設定底部導覽列
+        loadLettersFromApi()
+
         setupBottomNavigation()
     }
 
-    /**
-     * 載入信件資料。
-     * 未來這個函式會改成從資料庫讀取真實資料。
-     */
-    private fun loadLetters(): List<Letter> {
-        return listOf(
-            Letter("給十年後自己的信", "2024-05-20", "2034-12-25"),
-            Letter("關於夢想", "2024-01-01", "2025-01-01"),
-            Letter("2024 年的總結", "2023-12-31", "2024-12-31"),
-            Letter("生日快樂！", "2024-08-10", "2026-08-15"),
-            Letter("一項秘密計畫", "2024-07-01", "2027-07-07"),
-            Letter("給家人的話", "2023-05-20", "2028-05-20"),
-            Letter("新工作的期許", "2024-03-01", "2025-03-15"),
-            Letter("環球旅行計畫", "2022-09-10", "2030-09-10"),
-            Letter("買房子的那天", "2024-11-11", "2029-11-11"),
-            Letter("寵物的回憶", "2023-06-01", "2026-06-01")
-            // ... 其他信件
+    private fun showSortDialog() {
+        val sortOptions = arrayOf(
+            "依收信日期 (新到舊)",
+            "依收信日期 (舊到新)",
+            "依撰寫日期 (新到舊)",
+            "依撰寫日期 (舊到新)"
         )
+
+        AlertDialog.Builder(this)
+            .setTitle("選擇排序方式")
+            .setSingleChoiceItems(sortOptions, currentSortIndex) { dialog, which ->
+                currentSortIndex = which
+                setupRecyclerView(allLetters)
+                dialog.dismiss()
+            }
+            .setNegativeButton("取消", null)
+            .show()
     }
 
-    /**
-     * 設定日曆，為有信件的日期加上打點。
-     */
+    private fun loadLettersFromApi() {
+        progressBar.isVisible = true
+        recyclerView.isVisible = false
+        emptyView.isVisible = false
+
+        lifecycleScope.launch {
+            try {
+                val response = futureMailService.getMails()
+                if (response.code() in 200..299) {
+                    val lettersFromApi = response.body() ?: emptyList()
+                    allLetters = lettersFromApi.map { apiLetter ->
+                        Letter(
+                            subject = apiLetter.subject,
+                            writeDate = apiLetter.writeDate,
+                            deliveryDate = apiLetter.receiveDate,
+                            isRead = false // 預設所有從後端來的信件都是未讀
+                        )
+                    }
+                } else {
+                    Toast.makeText(this@OverviewActivity, "讀取信件失敗: ${response.code()}", Toast.LENGTH_SHORT).show()
+                    allLetters = emptyList() // 失敗時清空列表
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this@OverviewActivity, "讀取信件失敗: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
+                allLetters = emptyList() // 失敗時清空列表
+            } finally {
+                progressBar.isVisible = false
+                setupCalendar(allLetters)
+                setupRecyclerView(allLetters)
+            }
+        }
+    }
+
     private fun setupCalendar(letters: List<Letter>) {
         val deliveryDates = letters.mapNotNull { letter ->
             try {
@@ -132,9 +182,6 @@ class OverviewActivity : AppCompatActivity() {
         }
     }
 
-    /**
-     * 設定信箱列表，只顯示已到期的信件。
-     */
     private fun setupRecyclerView(letters: List<Letter>) {
         val today = LocalDate.now()
         val receivedLetters = letters.filter { letter ->
@@ -146,9 +193,26 @@ class OverviewActivity : AppCompatActivity() {
             }
         }
         
-        val sortedLetters = receivedLetters.sortedByDescending { it.deliveryDate }
+        val sortedLetters = when (currentSortIndex) {
+            0 -> receivedLetters.sortedByDescending { it.deliveryDate }
+            1 -> receivedLetters.sortedBy { it.deliveryDate }
+            2 -> receivedLetters.sortedByDescending { it.writeDate }
+            3 -> receivedLetters.sortedBy { it.writeDate }
+            else -> receivedLetters.sortedByDescending { it.deliveryDate }
+        }
 
-        val adapter = LetterAdapter(sortedLetters) { clickedLetter ->
+        if (sortedLetters.isEmpty()) {
+            recyclerView.isVisible = false
+            emptyView.isVisible = true
+        } else {
+            recyclerView.isVisible = true
+            emptyView.isVisible = false
+        }
+
+        val adapter = LetterAdapter(sortedLetters) { clickedLetter, position ->
+            clickedLetter.isRead = true
+            (recyclerView.adapter as? LetterAdapter)?.notifyItemChanged(position)
+
             val intent = Intent(this, LetterDetailActivity::class.java)
             intent.putExtra(LetterDetailActivity.EXTRA_SUBJECT, clickedLetter.subject)
             intent.putExtra(LetterDetailActivity.EXTRA_WRITE_DATE, clickedLetter.writeDate)
@@ -159,9 +223,6 @@ class OverviewActivity : AppCompatActivity() {
         recyclerView.layoutManager = LinearLayoutManager(this)
     }
 
-    /**
-     * 設定底部導覽列的點擊事件。
-     */
     private fun setupBottomNavigation() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
         bottomNavigationView.selectedItemId = R.id.nav4
