@@ -29,9 +29,11 @@ import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
-// --- 資料模型與 Adapter (與之前相同) ---
+// 修正：在 Letter 中加入 id，用來追蹤讀取狀態
 data class Letter(
+    val id: String,
     val subject: String,
+    val content: String,
     val writeDate: String, 
     val deliveryDate: String,
     var isRead: Boolean = false
@@ -96,6 +98,7 @@ class OverviewActivity : AppCompatActivity() {
 
     private var allLetters: List<Letter> = emptyList() 
     private var currentSortIndex = 0 
+    private val readLetterIds = mutableSetOf<String>() // 新增：用來記錄已讀信件的 ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -109,9 +112,12 @@ class OverviewActivity : AppCompatActivity() {
 
         btnSort.setOnClickListener { showSortDialog() }
 
-        loadLettersFromApi()
-
         setupBottomNavigation()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loadLettersFromApi()
     }
 
     private fun showSortDialog() {
@@ -145,10 +151,13 @@ class OverviewActivity : AppCompatActivity() {
                     val lettersFromApi = response.body() ?: emptyList()
                     allLetters = lettersFromApi.map { apiLetter ->
                         Letter(
+                            id = apiLetter.id,
                             subject = apiLetter.subject,
+                            content = apiLetter.content,
                             writeDate = apiLetter.writeDate.substring(0, 10),
                             deliveryDate = apiLetter.receiveDate.substring(0, 10),
-                            isRead = false
+                            // 修正：從 readLetterIds 恢復已讀狀態
+                            isRead = readLetterIds.contains(apiLetter.id)
                         )
                     }
                 } else {
@@ -167,6 +176,8 @@ class OverviewActivity : AppCompatActivity() {
     }
 
     private fun setupCalendar(letters: List<Letter>) {
+        calendarView.removeDecorators()
+        
         val deliveryDates = letters.mapNotNull { letter ->
             try {
                 val localDate = LocalDate.parse(letter.deliveryDate, formatter)
@@ -209,11 +220,16 @@ class OverviewActivity : AppCompatActivity() {
         }
 
         val adapter = LetterAdapter(sortedLetters) { clickedLetter, position ->
-            clickedLetter.isRead = true
-            (recyclerView.adapter as? LetterAdapter)?.notifyItemChanged(position)
+            // 修正：將已讀狀態儲存到 readLetterIds 中
+            if (!clickedLetter.isRead) {
+                clickedLetter.isRead = true
+                readLetterIds.add(clickedLetter.id)
+                (recyclerView.adapter as? LetterAdapter)?.notifyItemChanged(position)
+            }
 
             val intent = Intent(this, LetterDetailActivity::class.java)
             intent.putExtra(LetterDetailActivity.EXTRA_SUBJECT, clickedLetter.subject)
+            intent.putExtra(LetterDetailActivity.EXTRA_CONTENT, clickedLetter.content)
             intent.putExtra(LetterDetailActivity.EXTRA_WRITE_DATE, clickedLetter.writeDate)
             intent.putExtra(LetterDetailActivity.EXTRA_DELIVERY_DATE, clickedLetter.deliveryDate)
             startActivity(intent)
