@@ -11,25 +11,22 @@ import android.widget.ImageView
 import android.widget.ProgressBar
 import android.widget.TextView
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.isVisible
-import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.futurememailapp.network.FutureMailApi
-import com.example.futurememailapp.network.model.MailsResponse
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.prolificinteractive.materialcalendarview.CalendarDay
 import com.prolificinteractive.materialcalendarview.DayViewDecorator
 import com.prolificinteractive.materialcalendarview.DayViewFacade
 import com.prolificinteractive.materialcalendarview.MaterialCalendarView
 import com.prolificinteractive.materialcalendarview.spans.DotSpan
-import kotlinx.coroutines.launch
 import org.threeten.bp.LocalDate
 import org.threeten.bp.format.DateTimeFormatter
 
-// 修正：在 Letter 中加入 id，用來追蹤讀取狀態
+// --- 資料模型與 Adapter (與之前相同) ---
 data class Letter(
     val id: String,
     val subject: String,
@@ -41,7 +38,7 @@ data class Letter(
 
 class LetterAdapter(
     private val letters: List<Letter>,
-    private val onItemClicked: (Letter, Int) -> Unit
+    private val onItemClicked: (Letter, Int) -> Unit // 修正：把 position 參數加回來
 ) : RecyclerView.Adapter<LetterAdapter.LetterViewHolder>() {
 
     class LetterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -88,22 +85,20 @@ class EventDecorator(private val color: Int, dates: Collection<CalendarDay>) : D
 // --- 主頁面 ---
 class OverviewActivity : AppCompatActivity() {
 
+    private val viewModel: OverviewViewModel by viewModels()
+
     private lateinit var calendarView: MaterialCalendarView
     private lateinit var recyclerView: RecyclerView
     private lateinit var btnSort: Button
     private lateinit var progressBar: ProgressBar
     private lateinit var emptyView: TextView
     private val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd")
-    private val futureMailService by lazy { FutureMailApi.service }
-
-    private var allLetters: List<Letter> = emptyList() 
-    private var currentSortIndex = 0 
-    private val readLetterIds = mutableSetOf<String>() // 新增：用來記錄已讀信件的 ID
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_overview)
 
+        // 初始化畫面元件
         calendarView = findViewById(R.id.calendarView)
         recyclerView = findViewById(R.id.lettersRecyclerView)
         btnSort = findViewById(R.id.btnSort)
@@ -112,12 +107,34 @@ class OverviewActivity : AppCompatActivity() {
 
         btnSort.setOnClickListener { showSortDialog() }
 
+        setupObservers()
         setupBottomNavigation()
     }
 
     override fun onResume() {
         super.onResume()
-        loadLettersFromApi()
+        viewModel.loadLetters()
+    }
+
+    private fun setupObservers() {
+        viewModel.letters.observe(this) { letters ->
+            setupCalendar(letters)
+            setupRecyclerView(letters)
+        }
+
+        viewModel.isLoading.observe(this) { isLoading ->
+            progressBar.isVisible = isLoading
+            if (isLoading) {
+                recyclerView.isVisible = false
+                emptyView.isVisible = false
+            }
+        }
+
+        viewModel.errorMessage.observe(this) { errorMessage ->
+            errorMessage?.let {
+                Toast.makeText(this, it, Toast.LENGTH_SHORT).show()
+            }
+        }
     }
 
     private fun showSortDialog() {
@@ -130,55 +147,28 @@ class OverviewActivity : AppCompatActivity() {
 
         AlertDialog.Builder(this)
             .setTitle("選擇排序方式")
-            .setSingleChoiceItems(sortOptions, currentSortIndex) { dialog, which ->
-                currentSortIndex = which
-                setupRecyclerView(allLetters)
+            .setSingleChoiceItems(sortOptions, viewModel.currentSortIndex) { dialog, which ->
+                viewModel.setSortIndex(which)
                 dialog.dismiss()
             }
             .setNegativeButton("取消", null)
             .show()
     }
 
-    private fun loadLettersFromApi() {
-        progressBar.isVisible = true
-        recyclerView.isVisible = false
-        emptyView.isVisible = false
-
-        lifecycleScope.launch {
-            try {
-                val response = futureMailService.getMails()
-                if (response.isSuccessful) {
-                    val lettersFromApi = response.body() ?: emptyList()
-                    allLetters = lettersFromApi.map { apiLetter ->
-                        Letter(
-                            id = apiLetter.id,
-                            subject = apiLetter.subject,
-                            content = apiLetter.content,
-                            writeDate = apiLetter.writeDate.substring(0, 10),
-                            deliveryDate = apiLetter.receiveDate.substring(0, 10),
-                            // 修正：從 readLetterIds 恢復已讀狀態
-                            isRead = readLetterIds.contains(apiLetter.id)
-                        )
-                    }
-                } else {
-                    Toast.makeText(this@OverviewActivity, "讀取信件失敗: ${response.code()}", Toast.LENGTH_SHORT).show()
-                    allLetters = emptyList()
-                }
-            } catch (e: Exception) {
-                Toast.makeText(this@OverviewActivity, "讀取信件失敗: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
-                allLetters = emptyList()
-            } finally {
-                progressBar.isVisible = false
-                setupCalendar(allLetters)
-                setupRecyclerView(allLetters)
-            }
-        }
-    }
-
     private fun setupCalendar(letters: List<Letter>) {
         calendarView.removeDecorators()
         
-        val deliveryDates = letters.mapNotNull { letter ->
+        val today = LocalDate.now()
+        val futureLetters = letters.filter { letter ->
+            try {
+                val deliveryDate = LocalDate.parse(letter.deliveryDate, formatter)
+                deliveryDate.isAfter(today)
+            } catch (e: Exception) {
+                false
+            }
+        }
+
+        val deliveryDates = futureLetters.mapNotNull { letter ->
             try {
                 val localDate = LocalDate.parse(letter.deliveryDate, formatter)
                 CalendarDay.from(localDate.year, localDate.monthValue, localDate.dayOfMonth)
@@ -203,7 +193,7 @@ class OverviewActivity : AppCompatActivity() {
             }
         }
         
-        val sortedLetters = when (currentSortIndex) {
+        val sortedLetters = when (viewModel.currentSortIndex) {
             0 -> receivedLetters.sortedByDescending { it.deliveryDate }
             1 -> receivedLetters.sortedBy { it.deliveryDate }
             2 -> receivedLetters.sortedByDescending { it.writeDate }
@@ -219,13 +209,8 @@ class OverviewActivity : AppCompatActivity() {
             emptyView.isVisible = false
         }
 
-        val adapter = LetterAdapter(sortedLetters) { clickedLetter, position ->
-            // 修正：將已讀狀態儲存到 readLetterIds 中
-            if (!clickedLetter.isRead) {
-                clickedLetter.isRead = true
-                readLetterIds.add(clickedLetter.id)
-                (recyclerView.adapter as? LetterAdapter)?.notifyItemChanged(position)
-            }
+        val adapter = LetterAdapter(sortedLetters) { clickedLetter, _ -> // 修正：雖然 ViewModel 不再需要 position，但 Adapter 仍然需要它
+            viewModel.markAsRead(clickedLetter.id)
 
             val intent = Intent(this, LetterDetailActivity::class.java)
             intent.putExtra(LetterDetailActivity.EXTRA_SUBJECT, clickedLetter.subject)

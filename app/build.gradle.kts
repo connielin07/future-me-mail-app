@@ -62,4 +62,9 @@ dependencies {
     implementation("io.github.prolificinteractive:material-calendarview:2.0.1")
     // 日曆庫需要的日期時間函式庫
     implementation("com.jakewharton.threetenabp:threetenabp:1.4.0")
+
+    // ViewModel
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.8.7")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.8.7")
+    implementation("androidx.activity:activity-ktx:1.11.0") // for by viewModels()
 }
