@@ -15,8 +15,9 @@ class LetterDetailActivity : AppCompatActivity() {
         // 1. 找到畫面上的元件
         val toolbar: MaterialToolbar = findViewById(R.id.toolbar)
         val subjectTextView: TextView = findViewById(R.id.detailSubjectTextView)
-        val writeDateTextView: TextView = findViewById(R.id.detailWriteDateTextView) // 新的 TextView
+        val writeDateTextView: TextView = findViewById(R.id.detailWriteDateTextView)
         val deliveryDateTextView: TextView = findViewById(R.id.detailDeliveryDateTextView)
+        val contentTextView: TextView = findViewById(R.id.detailContentTextView) // 新增：找到內文的 TextView
 
         // 2. 將 Toolbar 設定為此 Activity 的 ActionBar
         setSupportActionBar(toolbar)
@@ -27,13 +28,15 @@ class LetterDetailActivity : AppCompatActivity() {
 
         // 4. 取得從 Intent 傳來的資料
         val subject = intent.getStringExtra(EXTRA_SUBJECT)
-        val writeDate = intent.getStringExtra(EXTRA_WRITE_DATE) // 接收新的撰寫日期
+        val writeDate = intent.getStringExtra(EXTRA_WRITE_DATE)
         val deliveryDate = intent.getStringExtra(EXTRA_DELIVERY_DATE)
+        val content = intent.getStringExtra(EXTRA_CONTENT) // 新增：接收新的內文資料
         
         // 5. 將資料設定到畫面上
         subjectTextView.text = subject
-        writeDateTextView.text = "寫於: $writeDate" // 設定撰寫日期的文字
+        writeDateTextView.text = "寫於: $writeDate"
         deliveryDateTextView.text = "預計寄送: $deliveryDate"
+        contentTextView.text = content // 新增：設定內文的文字
     }
 
     // 6. 覆寫這個方法來處理返回箭頭的點擊
@@ -48,7 +51,8 @@ class LetterDetailActivity : AppCompatActivity() {
     // 7. 定義所有用來傳遞資料的標籤
     companion object {
         const val EXTRA_SUBJECT = "com.example.futurememailapp.EXTRA_SUBJECT"
-        const val EXTRA_WRITE_DATE = "com.example.futurememailapp.EXTRA_WRITE_DATE" // 新增的標籤
+        const val EXTRA_WRITE_DATE = "com.example.futurememailapp.EXTRA_WRITE_DATE"
         const val EXTRA_DELIVERY_DATE = "com.example.futurememailapp.EXTRA_DELIVERY_DATE"
+        const val EXTRA_CONTENT = "com.example.futurememailapp.EXTRA_CONTENT" // 新增：定義內文的標籤
     }
 }
