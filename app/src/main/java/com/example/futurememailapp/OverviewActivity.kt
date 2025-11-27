@@ -101,7 +101,6 @@ class OverviewActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_overview)
 
-        // 初始化畫面元件
         calendarView = findViewById(R.id.calendarView)
         recyclerView = findViewById(R.id.lettersRecyclerView)
         btnSort = findViewById(R.id.btnSort)
@@ -142,23 +141,23 @@ class OverviewActivity : AppCompatActivity() {
         lifecycleScope.launch {
             try {
                 val response = futureMailService.getMails()
-                if (response.code() in 200..299) {
+                if (response.isSuccessful) {
                     val lettersFromApi = response.body() ?: emptyList()
                     allLetters = lettersFromApi.map { apiLetter ->
                         Letter(
                             subject = apiLetter.subject,
-                            writeDate = apiLetter.writeDate,
-                            deliveryDate = apiLetter.receiveDate,
-                            isRead = false // 預設所有從後端來的信件都是未讀
+                            writeDate = apiLetter.writeDate.substring(0, 10),
+                            deliveryDate = apiLetter.receiveDate.substring(0, 10),
+                            isRead = false
                         )
                     }
                 } else {
                     Toast.makeText(this@OverviewActivity, "讀取信件失敗: ${response.code()}", Toast.LENGTH_SHORT).show()
-                    allLetters = emptyList() // 失敗時清空列表
+                    allLetters = emptyList()
                 }
             } catch (e: Exception) {
                 Toast.makeText(this@OverviewActivity, "讀取信件失敗: ${e.localizedMessage}", Toast.LENGTH_SHORT).show()
-                allLetters = emptyList() // 失敗時清空列表
+                allLetters = emptyList()
             } finally {
                 progressBar.isVisible = false
                 setupCalendar(allLetters)
