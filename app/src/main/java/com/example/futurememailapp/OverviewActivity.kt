@@ -38,7 +38,7 @@ data class Letter(
 
 class LetterAdapter(
     private val letters: List<Letter>,
-    private val onItemClicked: (Letter, Int) -> Unit // 修正：把 position 參數加回來
+    private val onItemClicked: (Letter) -> Unit // 修正：ViewModel 中不再需要 position
 ) : RecyclerView.Adapter<LetterAdapter.LetterViewHolder>() {
 
     class LetterViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
@@ -64,7 +64,7 @@ class LetterAdapter(
         holder.unreadDotImageView.visibility = if (letter.isRead) View.INVISIBLE else View.VISIBLE
 
         holder.itemView.setOnClickListener {
-            onItemClicked(letter, holder.adapterPosition)
+            onItemClicked(letter)
         }
     }
 }
@@ -209,7 +209,7 @@ class OverviewActivity : AppCompatActivity() {
             emptyView.isVisible = false
         }
 
-        val adapter = LetterAdapter(sortedLetters) { clickedLetter, _ -> // 修正：雖然 ViewModel 不再需要 position，但 Adapter 仍然需要它
+        val adapter = LetterAdapter(sortedLetters) { clickedLetter ->
             viewModel.markAsRead(clickedLetter.id)
 
             val intent = Intent(this, LetterDetailActivity::class.java)

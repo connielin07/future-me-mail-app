@@ -1,16 +1,18 @@
 package com.example.futurememailapp
 
+import android.app.Application
+import android.content.Context
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.futurememailapp.network.FutureMailApi
-import com.example.futurememailapp.network.model.MailsResponse
 import kotlinx.coroutines.launch
 
-class OverviewViewModel : ViewModel() {
+class OverviewViewModel(application: Application) : AndroidViewModel(application) {
 
     private val futureMailService by lazy { FutureMailApi.service }
+    private val sharedPreferences = application.getSharedPreferences("FutureMeMailApp", Context.MODE_PRIVATE)
 
     // --- LiveData --- (可以被 Activity 觀察的資料)
     private val _letters = MutableLiveData<List<Letter>>()
@@ -25,7 +27,24 @@ class OverviewViewModel : ViewModel() {
     // --- 資料與狀態 ---
     private val readLetterIds = mutableSetOf<String>()
     var currentSortIndex = 0
-        private set // 只允許 ViewModel 內部修改
+        private set
+
+    init {
+        // ViewModel 初始化時，從 SharedPreferences 載入已讀狀態
+        loadReadLetterIds()
+    }
+
+    private fun loadReadLetterIds() {
+        val ids = sharedPreferences.getStringSet("read_letter_ids", emptySet()) ?: emptySet()
+        readLetterIds.addAll(ids)
+    }
+
+    private fun saveReadLetterIds() {
+        with(sharedPreferences.edit()) {
+            putStringSet("read_letter_ids", readLetterIds)
+            apply()
+        }
+    }
 
     fun loadLetters() {
         _isLoading.value = true
@@ -59,14 +78,14 @@ class OverviewViewModel : ViewModel() {
 
     fun setSortIndex(index: Int) {
         currentSortIndex = index
-        // 觸發 letters 更新，讓 Activity 重新排序
         _letters.value = _letters.value 
     }
 
     fun markAsRead(letterId: String) {
         if (!readLetterIds.contains(letterId)) {
             readLetterIds.add(letterId)
-            // 更新 LiveData，讓 Activity 更新畫面
+            saveReadLetterIds() // 每次更新時，都回存到 SharedPreferences
+
             _letters.value = _letters.value?.map { 
                 if (it.id == letterId) it.copy(isRead = true) else it
             }
