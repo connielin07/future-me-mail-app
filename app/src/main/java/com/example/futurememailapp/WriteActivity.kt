@@ -72,6 +72,7 @@ class WriteActivity : AppCompatActivity() {
             val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
             writeCal.time = sdf.parse(tvWriteDate.text.toString())!!
             dpd.datePicker.minDate = writeCal.timeInMillis
+
             dpd.show()
         }
 
