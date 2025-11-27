@@ -31,7 +31,6 @@ class InstructActivity : AppCompatActivity() {
             val uri = Uri.parse("android.resource://${packageName}/${R.raw.instruct_test}")
             videoView.setVideoURI(uri)
             videoView.setOnPreparedListener { it.isLooping = true }
-            videoView.start()
         } catch (e: Exception) {
             // 如果找不到影片，就把它藏起來
             videoView.visibility = View.GONE
