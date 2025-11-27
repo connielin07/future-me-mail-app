@@ -28,6 +28,18 @@ app.get(["/health", "/api/health"], (_, res) => {
   res.json({ status: "ok", timestamp: new Date().toISOString() });
 });
 
+app.get("/api/future-mails", async (_req, res) => {
+  try {
+    const [rows] = await pool.query(
+      "SELECT id, write_date AS writeDate, receive_date AS receiveDate, subject, content, email, created_at AS createdAt FROM future_mail ORDER BY created_at DESC"
+    );
+    res.json(rows);
+  } catch (dbErr) {
+    console.error("Failed to fetch future mails:", dbErr);
+    res.status(500).json({ message: "Failed to fetch future mails." });
+  }
+});
+
 app.post("/api/future-mails", async (req, res) => {
   const { writeDate, receiveDate, subject, content, email } = req.body || {};
 
