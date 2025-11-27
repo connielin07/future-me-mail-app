@@ -28,7 +28,7 @@ class WriteActivity : AppCompatActivity() {
     private lateinit var etContent: EditText
     private lateinit var etEmail: EditText
     private lateinit var btnSend: Button
-    private lateinit var btnExit: Button
+    private lateinit var btnClear: Button
 
     private val futureMailService by lazy { FutureMailApi.service }
 
@@ -48,7 +48,7 @@ class WriteActivity : AppCompatActivity() {
         etContent = findViewById(R.id.etContent)
         etEmail = findViewById(R.id.etEmail)
         btnSend = findViewById(R.id.btnSend)
-        btnExit = findViewById(R.id.btnExit)
+        btnClear = findViewById(R.id.btnClear)
 
         // --- 預設寫信日期為今天 ---
         val today = Calendar.getInstance()
@@ -77,7 +77,7 @@ class WriteActivity : AppCompatActivity() {
         }
 
         btnSend.setOnClickListener { submitLetter() }
-        btnExit.setOnClickListener { finish() }
+        btnClear.setOnClickListener { showClearConfirmDialog() }
 
         // --- 底部導覽列 ---
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
@@ -171,6 +171,23 @@ class WriteActivity : AppCompatActivity() {
             Toast.makeText(this@WriteActivity, toastMessage, Toast.LENGTH_SHORT).show()
             toggleSendEnabled(true)
         }
+    }
+
+    private fun showClearConfirmDialog() {
+        androidx.appcompat.app.AlertDialog.Builder(this)
+            .setTitle("確認清空？")
+            .setMessage("確定要清空所有欄位嗎？")
+            .setPositiveButton("確認清空") { _, _ ->
+                clearFields()
+            }
+            .setNegativeButton("取消", null)
+            .show()
+    }
+
+    private fun clearFields() {
+        etTitle.text?.clear()
+        etContent.text?.clear()
+        etEmail.text?.clear()
     }
 
     private fun toggleSendEnabled(enabled: Boolean) {
