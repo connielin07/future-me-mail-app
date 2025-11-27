@@ -27,27 +27,31 @@ class MainActivity : AppCompatActivity() {
             startActivity(Intent(this, InstructActivity::class.java))
         }
 
-        // --- 底部導覽列跳轉 ---
+        // --- 底部導覽列 ---
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
 
-        // 預設選中 Main 頁（亮起）
+        // 預設選中 MainActivity 頁（亮起）
         bottomNavigationView.selectedItemId = R.id.nav1
 
         bottomNavigationView.setOnItemSelectedListener { item ->
-            // 如果點擊的項目不是當前頁面，才進行跳轉
-            if (item.itemId != bottomNavigationView.selectedItemId) {
-                val intent = when (item.itemId) {
-                    R.id.nav2 -> Intent(this, InstructActivity::class.java)
-                    R.id.nav3 -> Intent(this, WriteActivity::class.java)
-                    R.id.nav4 -> Intent(this, OverviewActivity::class.java)
-                    else -> null
+            when (item.itemId) {
+                R.id.nav1 -> { // Home（當前頁，不跳）
+                    true
                 }
-                intent?.let {
-                    it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                    startActivity(it)
+                R.id.nav2 -> { // Instruct
+                    startActivity(Intent(this, InstructActivity::class.java))
+                    true
                 }
+                R.id.nav3 -> { // Write
+                    startActivity(Intent(this, WriteActivity::class.java))
+                    true
+                }
+                R.id.nav4 -> { // Overview
+                    startActivity(Intent(this, OverviewActivity::class.java))
+                    true
+                }
+                else -> false
             }
-            true
         }
     }
 }

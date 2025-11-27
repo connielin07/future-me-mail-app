@@ -225,22 +225,29 @@ class OverviewActivity : AppCompatActivity() {
 
     private fun setupBottomNavigation() {
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        // 預設選中 Overview 頁（亮起）
         bottomNavigationView.selectedItemId = R.id.nav4
 
         bottomNavigationView.setOnItemSelectedListener { item ->
-            if (item.itemId != bottomNavigationView.selectedItemId) {
-                val intent = when (item.itemId) {
-                    R.id.nav1 -> Intent(this, MainActivity::class.java)
-                    R.id.nav2 -> Intent(this, InstructActivity::class.java)
-                    R.id.nav3 -> Intent(this, WriteActivity::class.java)
-                    else -> null
+            when (item.itemId) {
+                R.id.nav1 -> { // Home
+                    startActivity(Intent(this, MainActivity::class.java))
+                    true
                 }
-                intent?.let {
-                    it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                    startActivity(it)
+                R.id.nav2 -> { // Instruct
+                    startActivity(Intent(this, InstructActivity::class.java))
+                    true
                 }
+                R.id.nav3 -> { // Write
+                    startActivity(Intent(this, WriteActivity::class.java))
+                    true
+                }
+                R.id.nav4 -> { // Overview（當前頁，不跳）
+                    true
+                }
+                else -> false
             }
-            true
         }
+
     }
 }

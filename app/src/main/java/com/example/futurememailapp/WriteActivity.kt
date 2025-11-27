@@ -81,22 +81,28 @@ class WriteActivity : AppCompatActivity() {
 
         // --- 底部導覽列 ---
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        // MainActivity
         bottomNavigationView.selectedItemId = R.id.nav3
 
         bottomNavigationView.setOnItemSelectedListener { item ->
-            if (item.itemId != bottomNavigationView.selectedItemId) {
-                val intent = when (item.itemId) {
-                    R.id.nav1 -> Intent(this, MainActivity::class.java)
-                    R.id.nav2 -> Intent(this, InstructActivity::class.java)
-                    R.id.nav4 -> Intent(this, OverviewActivity::class.java)
-                    else -> null
+            when (item.itemId) {
+                R.id.nav1 -> { // Home
+                    startActivity(Intent(this, MainActivity::class.java))
+                    true
                 }
-                intent?.let {
-                    it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                    startActivity(it)
+                R.id.nav2 -> { // Instruct
+                    startActivity(Intent(this, InstructActivity::class.java))
+                    true
                 }
+                R.id.nav3 -> { // Write（當前頁，不跳轉）
+                    true
+                }
+                R.id.nav4 -> { // Overview
+                    startActivity(Intent(this, OverviewActivity::class.java))
+                    true
+                }
+                else -> false
             }
-            true
         }
     }
 

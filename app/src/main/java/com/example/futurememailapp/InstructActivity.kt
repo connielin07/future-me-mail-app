@@ -39,22 +39,27 @@ class InstructActivity : AppCompatActivity() {
 
         // --- 底部導覽列跳轉 ---
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
+        // 預設選中 Instruct 頁（亮起）
         bottomNavigationView.selectedItemId = R.id.nav2
-
         bottomNavigationView.setOnItemSelectedListener { item ->
-            if (item.itemId != bottomNavigationView.selectedItemId) {
-                val intent = when (item.itemId) {
-                    R.id.nav1 -> Intent(this, MainActivity::class.java)
-                    R.id.nav3 -> Intent(this, WriteActivity::class.java)
-                    R.id.nav4 -> Intent(this, OverviewActivity::class.java)
-                    else -> null
+            when (item.itemId) {
+                R.id.nav1 -> { // Home
+                    startActivity(Intent(this, MainActivity::class.java))
+                    true
                 }
-                intent?.let {
-                    it.addFlags(Intent.FLAG_ACTIVITY_REORDER_TO_FRONT)
-                    startActivity(it)
+                R.id.nav2 -> { // Instruct（當前頁，不跳）
+                    true
                 }
+                R.id.nav3 -> { // Write
+                    startActivity(Intent(this, WriteActivity::class.java))
+                    true
+                }
+                R.id.nav4 -> { // Overview
+                    startActivity(Intent(this, OverviewActivity::class.java))
+                    true
+                }
+                else -> false
             }
-            true
         }
     }
 }
