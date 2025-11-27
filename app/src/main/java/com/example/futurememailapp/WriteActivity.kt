@@ -66,6 +66,12 @@ class WriteActivity : AppCompatActivity() {
                 val dateStr = String.format(Locale.getDefault(), "%04d-%02d-%02d", selectedYear, selectedMonth + 1, selectedDay)
                 tvReceiveDate.text = dateStr
             }, year, month, day)
+
+            // 限制收信日期不能早於寫信日期
+            val writeCal = Calendar.getInstance()
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            writeCal.time = sdf.parse(tvWriteDate.text.toString())!!
+            dpd.datePicker.minDate = writeCal.timeInMillis
             dpd.show()
         }
 
@@ -118,6 +124,21 @@ class WriteActivity : AppCompatActivity() {
 
         if (!email.isNullOrEmpty() && !Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             Toast.makeText(this, "Email 格式不正確", Toast.LENGTH_SHORT).show()
+            return
+        }
+
+        // --- 檢查收信日期是否早於寄信日期 ---
+        try {
+            val sdf = SimpleDateFormat("yyyy-MM-dd", Locale.getDefault())
+            val write = sdf.parse(writeDate)
+            val receive = sdf.parse(receiveDate)
+
+            if (receive.before(write)) {
+                Toast.makeText(this, "收信日期不能早於寫信日期", Toast.LENGTH_SHORT).show()
+                return
+            }
+        } catch (e: Exception) {
+            Toast.makeText(this, "日期格式錯誤", Toast.LENGTH_SHORT).show()
             return
         }
 
