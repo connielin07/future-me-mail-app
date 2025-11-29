@@ -31,7 +31,7 @@ app.get(["/health", "/api/health"], (_, res) => {
 app.get("/api/future-mails", async (_req, res) => {
   try {
     const [rows] = await pool.query(
-      "SELECT id, write_date AS writeDate, receive_date AS receiveDate, subject, content, email, created_at AS createdAt FROM future_mail ORDER BY created_at DESC"
+      "SELECT id, write_date AS writeDate, receive_date AS receiveDate, subject, content, email, device_token AS deviceToken, delivered, delivered_at AS deliveredAt, created_at AS createdAt FROM future_mail ORDER BY created_at DESC"
     );
     res.json(rows);
   } catch (dbErr) {
@@ -41,7 +41,7 @@ app.get("/api/future-mails", async (_req, res) => {
 });
 
 app.post("/api/future-mails", async (req, res) => {
-  const { writeDate, receiveDate, subject, content, email } = req.body || {};
+  const { writeDate, receiveDate, subject, content, email, deviceToken } = req.body || {};
 
   if (!writeDate || !receiveDate || !subject || !content) {
     return res.status(400).json({ message: "Missing required fields." });
@@ -54,13 +54,14 @@ app.post("/api/future-mails", async (req, res) => {
     subject,
     content,
     email: email || null,
+    deviceToken: deviceToken || null,
     createdAt: new Date()
   };
 
   try {
     await pool.execute(
-      `INSERT INTO future_mail (id, write_date, receive_date, subject, content, email, created_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?)`,
+      `INSERT INTO future_mail (id, write_date, receive_date, subject, content, email, device_token, created_at)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         entry.id,
         entry.writeDate,
@@ -68,6 +69,7 @@ app.post("/api/future-mails", async (req, res) => {
         entry.subject,
         entry.content,
         entry.email,
+        entry.deviceToken,
         entry.createdAt
       ]
     );

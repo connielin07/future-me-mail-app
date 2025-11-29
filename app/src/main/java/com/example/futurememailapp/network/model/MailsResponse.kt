@@ -8,5 +8,9 @@ data class MailsResponse(
     val content: String,
     val writeDate: String,
     val receiveDate: String,
-    val email: String? // email 可以是 null
+    val email: String? = null,
+    @SerializedName("deviceToken") val deviceToken: String? = null,
+    @SerializedName("delivered") val delivered: Int? = null,
+    @SerializedName("deliveredAt") val deliveredAt: String? = null,
+    @SerializedName("createdAt") val createdAt: String
 )

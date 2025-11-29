@@ -7,7 +7,8 @@ data class FutureMailRequest(
     @SerializedName("receiveDate") val receiveDate: String,
     @SerializedName("subject") val subject: String,
     @SerializedName("content") val content: String,
-    @SerializedName("email") val email: String? = null
+    @SerializedName("email") val email: String? = null,
+    @SerializedName("deviceToken") val deviceToken: String? = null
 )
 
 data class FutureMailResponse(

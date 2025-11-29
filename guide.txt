@@ -7,8 +7,8 @@ FutureMe 後端部署待辦
 
 1. 安裝/驗證 Node 依賴  
    - 進入後端目錄：`cd ~/FutureMeMailApp/server`  
-   - 安裝套件：`npm install`（包含 express、mysql2…）。  
-   - 建立環境檔：`cp .env.example .env` 後填入 `PORT`, `DB_*`, `SMTP_*`；`DB_PASS` 必須與資料庫實際密碼一致。
+   - 安裝套件：`npm install`（包含 express、mysql2、firebase-admin…）。  
+   - 建立環境檔：`cp .env.example .env` 後填入 `PORT`, `DB_*`, `SMTP_*`；`DB_PASS` 必須與資料庫實際密碼一致；`GOOGLE_APPLICATION_CREDENTIALS` 指向 FCM 服務帳戶 JSON 路徑。
 
 2. 確認 MariaDB 設定  
    - 以 `sudo mysql` 建立資料庫與使用者（並設定與 `.env` 相同的密碼）：  
@@ -28,9 +28,17 @@ FutureMe 後端部署待辦
        subject VARCHAR(255) NOT NULL,
        content TEXT NOT NULL,
        email VARCHAR(255),
+       device_token VARCHAR(255),
        delivered TINYINT(1) DEFAULT 0,
+       delivered_at TIMESTAMP NULL DEFAULT NULL,
        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
      );
+     ```
+   - 若已有資料表，可依序執行：
+     ```
+     ALTER TABLE future_mail ADD COLUMN IF NOT EXISTS device_token VARCHAR(255);
+     ALTER TABLE future_mail ADD COLUMN IF NOT EXISTS delivered TINYINT(1) DEFAULT 0;
+     ALTER TABLE future_mail ADD COLUMN IF NOT EXISTS delivered_at TIMESTAMP NULL DEFAULT NULL;
      ```
 
 3. 測試 Node API  
@@ -42,7 +50,7 @@ FutureMe 後端部署待辦
        --data-binary '{"writeDate":"2025-01-01","receiveDate":"2025-12-31","subject":"test","content":"hello","email":"you@example.com"}'
      ```
      （請保持 JSON 為單行或使用 `--data-binary @payload.json`，避免換行造成 `Bad control character` 錯誤。）
-   - Android 端（`activity_write.xml`）必須將「寫信日期」、「收信日期」、「信件主旨」、「內文（etContent）」與可選的 `email` 組成上述 JSON，POST 到 `/api/future-mails`，後端才會寫入資料庫。
+   - Android 端（`activity_write.xml`）必須將「寫信日期」、「收信日期」、「信件主旨」、「內文（etContent）」、可選的 `email` 與 `deviceToken` 組成上述 JSON，POST 到 `/api/future-mails`，後端才會寫入資料庫（若未用推播，可先傳 `null`）。
 
 4. 設定 Nginx 反向代理  
    - 需以 sudo 編輯 `/etc/nginx/sites-enabled/futuremail.cocotoget.com`，加入 API 反向代理：  
