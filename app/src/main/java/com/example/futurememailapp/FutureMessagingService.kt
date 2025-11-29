@@ -21,8 +21,12 @@ class FutureMessagingService : FirebaseMessagingService() {
     }
 
     override fun onMessageReceived(message: RemoteMessage) {
-        val title = message.notification?.title ?: "信件已送達！"
-        val body = message.notification?.body ?: "點擊查看你的信件"
+        val title = message.notification?.title
+            ?: message.data["title"]
+            ?: "信件已送達！"
+        val body = message.notification?.body
+            ?: message.data["body"]
+            ?: "點擊查看你的信件"
 
         showDeliveryNotification(title, body)
     }

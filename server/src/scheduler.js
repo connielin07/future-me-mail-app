@@ -57,15 +57,16 @@ async function sendPushNotification(mail) {
 
   const message = {
     token: mail.deviceToken,
-    notification: {
-      title: "信件已送達！",
-      body: mail.subject || "點擊查看你的未來來信"
+    android: {
+      priority: "HIGH"
     },
     data: {
       mailId: String(mail.id),
       receiveDate: String(mail.receiveDate || ""),
       subject: String(mail.subject || ""),
-      email: String(mail.email || "")
+      email: String(mail.email || ""),
+      title: "信件已送達！",
+      body: mail.subject || "點擊查看你的未來來信"
     }
   };
 
