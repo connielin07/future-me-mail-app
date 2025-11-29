@@ -6,7 +6,8 @@
   "main": "src/index.js",
   "scripts": {
     "start": "node src/index.js",
-    "dev": "NODE_ENV=development node src/index.js"
+    "dev": "NODE_ENV=development node src/index.js",
+    "scheduler": "node src/scheduler.js"
   },
   "keywords": [
     "future-mail",
@@ -20,6 +21,8 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
-    "nodemailer": "^6.9.14"
+    "nodemailer": "^6.9.14",
+    "node-cron": "^3.0.3",
+    "dayjs": "^1.11.13"
   }
 }

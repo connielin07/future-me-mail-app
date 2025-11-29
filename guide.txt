@@ -61,4 +61,5 @@ FutureMe 後端部署待辦
 5. 常駐與監控  
    - 啟動：`pm2 start src/index.js --name futureme-api --cwd ~/FutureMeMailApp/server`  
    - 儲存並設定開機自動啟動：`pm2 save` 後執行 `sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u connie --hp /home/connie`  
-   - 監控：`pm2 status`、`pm2 logs futureme-api`、`mysql -u futureme -p futureme -e "SELECT COUNT(*) FROM future_mail;"`。
+   - 若需每日推播排程：`pm2 start src/scheduler.js --name futureme-worker --cwd ~/FutureMeMailApp/server`（會在台灣時間每日 09:00 執行）  
+   - 監控：`pm2 status`、`pm2 logs futureme-api`、`pm2 logs futureme-worker`、`mysql -u futureme -p futureme -e "SELECT COUNT(*) FROM future_mail;"`。
