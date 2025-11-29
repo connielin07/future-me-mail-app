@@ -62,8 +62,10 @@ async function sendPushNotification(mail) {
       body: mail.subject || "點擊查看你的未來來信"
     },
     data: {
-      mailId: mail.id,
-      receiveDate: mail.receiveDate
+      mailId: String(mail.id),
+      receiveDate: String(mail.receiveDate || ""),
+      subject: String(mail.subject || ""),
+      email: String(mail.email || "")
     }
   };
 
