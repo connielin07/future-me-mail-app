@@ -27,7 +27,6 @@ class WriteActivity : AppCompatActivity() {
     private lateinit var etTitle: EditText
     private lateinit var etContent: EditText
     private lateinit var etEmail: EditText
-    private lateinit var etDeviceToken: EditText
     private lateinit var btnSend: Button
     private lateinit var btnClear: Button
 
@@ -48,7 +47,6 @@ class WriteActivity : AppCompatActivity() {
         etTitle = findViewById(R.id.etTitle)
         etContent = findViewById(R.id.etContent)
         etEmail = findViewById(R.id.etEmail)
-        etDeviceToken = findViewById(R.id.etDeviceToken)
         btnSend = findViewById(R.id.btnSend)
         btnClear = findViewById(R.id.btnClear)
 
@@ -77,8 +75,6 @@ class WriteActivity : AppCompatActivity() {
 
             dpd.show()
         }
-
-        etDeviceToken.setText(MainApplication.currentFcmToken.orEmpty())
 
         btnSend.setOnClickListener { submitLetter() }
         btnClear.setOnClickListener { showClearConfirmDialog() }
@@ -117,8 +113,7 @@ class WriteActivity : AppCompatActivity() {
         val content = etContent.text.toString().trim()
         val emailRaw = etEmail.text.toString().trim()
         val email = emailRaw.ifEmpty { null }
-        val deviceTokenRaw = etDeviceToken.text.toString().trim()
-        val deviceToken = deviceTokenRaw.ifEmpty { null }
+        val deviceToken = MainApplication.currentFcmToken
 
         if (subject.isEmpty()) {
             Toast.makeText(this, "請輸入信件主旨", Toast.LENGTH_SHORT).show()
@@ -201,7 +196,6 @@ class WriteActivity : AppCompatActivity() {
         etTitle.text?.clear()
         etContent.text?.clear()
         etEmail.text?.clear()
-        etDeviceToken.text?.clear()
     }
 
     private fun toggleSendEnabled(enabled: Boolean) {
