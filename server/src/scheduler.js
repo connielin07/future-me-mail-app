@@ -107,7 +107,7 @@ async function handleDailyDelivery() {
 }
 
 cron.schedule(
-  "0 9 * * *",
+  "* * * * *",
   () => {
     handleDailyDelivery().catch((err) => console.error("[scheduler] Unexpected failure:", err));
   },
