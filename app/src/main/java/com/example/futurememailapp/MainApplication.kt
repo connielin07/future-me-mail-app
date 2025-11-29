@@ -11,7 +11,6 @@ class MainApplication : Application() {
     companion object {
         @Volatile
         var currentFcmToken: String? = null
-            private set
     }
 
     override fun onCreate() {
