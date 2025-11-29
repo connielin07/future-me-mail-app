@@ -62,8 +62,9 @@ FutureMe 後端部署待辦
      curl -s http://127.0.0.1:8080/health
      curl -s https://futuremail.cocotoget.com/api/health
      ```
-   - Android 端（`activity_write.xml`+`WriteActivity`）會自動讀取 FCM token（未來整合後）並填入 `deviceToken`；若尚未整合 FCM，至少可以在 App 內貼上 token，或傳 `null` 測試 API。
-   - Android 專案需整合 Firebase Messaging（下載 `google-services.json`、在 `build.gradle` 套用 Google services plugin、加入 `firebase-messaging` 依賴），在 `FirebaseMessaging.getInstance().token` 取得 token 後送給後端。
+   - Android 端（`WriteActivity`）會自動讀取 FCM token 並附在 `deviceToken`，不需手動輸入；若模擬器尚未登入 Google 服務或無法取得 token，Post API 仍可正常測試，但推播會被略過。
+   - Android 專案已整合 Firebase Messaging（下載 `google-services.json`、Gradle 套用 Google services plugin、加入 `firebase-messaging` 依賴）；當 `FirebaseMessaging.getInstance().token` 取得 token 後，會透過 `MainApplication` 暫存，再由 `WriteActivity` 帶出。
+   - Android 13+ 需要求 `POST_NOTIFICATIONS` 權限：`MainActivity` 會在啟動時動態請求，若使用者拒絕則不會收到推播（可提醒使用者手動開啟）。
 
 4. 設定 Nginx 反向代理  
    - 需以 sudo 編輯 `/etc/nginx/sites-enabled/futuremail.cocotoget.com`，加入 API 反向代理：  
@@ -82,5 +83,5 @@ FutureMe 後端部署待辦
 5. 常駐與監控  
    - 啟動：`pm2 start src/index.js --name futureme-api --cwd ~/FutureMeMailApp/server`  
    - 儲存並設定開機自動啟動：`pm2 save` 後執行 `sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u connie --hp /home/connie`  
-   - 若需每日推播排程：`pm2 start src/scheduler.js --name futureme-worker --cwd ~/FutureMeMailApp/server`（會在台灣時間每日 09:00 執行，內建 firebase-admin 推播骨架）  
+   - 若需每日推播排程：`pm2 start src/scheduler.js --name futureme-worker --cwd ~/FutureMeMailApp/server`（會在台灣時間每日 09:00 執行，採 data-only FCM 推播，App 端 `FutureMessagingService` 會接收並顯示通知，點擊後開啟 OverviewActivity）  
    - 監控：`pm2 status`、`pm2 logs futureme-api`、`pm2 logs futureme-worker`、`mysql -u futureme -p futureme -e "SELECT COUNT(*) FROM future_mail;"`。
