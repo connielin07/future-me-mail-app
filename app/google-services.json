@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "293949586562",
+    "project_id": "future-mail-cd349",
+    "storage_bucket": "future-mail-cd349.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:293949586562:android:9246c692457d13e65e089b",
+        "android_client_info": {
+          "package_name": "com.example.futurememailapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDXx9rPQhsZWwKn6gIopOHnttCxByur0YE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

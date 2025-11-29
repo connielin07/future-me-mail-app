@@ -78,6 +78,8 @@ class WriteActivity : AppCompatActivity() {
             dpd.show()
         }
 
+        etDeviceToken.setText(MainApplication.currentFcmToken.orEmpty())
+
         btnSend.setOnClickListener { submitLetter() }
         btnClear.setOnClickListener { showClearConfirmDialog() }
 
