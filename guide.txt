@@ -87,6 +87,6 @@ FutureMe 後端部署待辦
    - 監控：`pm2 status`、`pm2 logs futureme-api`、`pm2 logs futureme-worker`、`mysql -u futureme -p futureme -e "SELECT COUNT(*) FROM future_mail;"`。
 
 6. Android App：教學影片縮圖 + 播放  
-   - 版面：`app/src/main/res/layout/activity_instruct.xml` 以 `FrameLayout` 包住縮圖 `@drawable/instruct_thubnail`（置中播放圖示 `@android:drawable/ic_media_play`），實際 `VideoView` 預設 `gone`。  
+   - 版面：`app/src/main/res/layout/activity_instruct.xml` 以 `FrameLayout` 包住縮圖 `@drawable/instruct_thumbnail`（置中播放圖示 `@android:drawable/ic_media_play`），實際 `VideoView` 預設 `gone`。  
    - 字串：`app/src/main/res/values/strings.xml` 新增無障礙描述 `content_desc_video_thumbnail`、`content_desc_play_video`。  
    - 行為：`app/src/main/java/com/example/futurememailapp/InstructActivity.kt` 掛上 `videoPreviewContainer` click listener，點擊後隱藏縮圖、顯示 `VideoView` 並播放 `R.raw.instruct_test`，失敗時則隱藏縮圖與播放器避免黑框。
