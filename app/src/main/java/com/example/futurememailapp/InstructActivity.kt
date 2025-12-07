@@ -21,6 +21,7 @@ class InstructActivity : AppCompatActivity() {
 
         // --- 影片播放邏輯 ---
         val videoView = findViewById<VideoView>(R.id.videoTutorial)
+        val previewContainer = findViewById<View>(R.id.videoPreviewContainer)
         val mediaController = MediaController(this).apply {
             setAnchorView(videoView)
         }
@@ -30,10 +31,18 @@ class InstructActivity : AppCompatActivity() {
         try {
             val uri = Uri.parse("android.resource://${packageName}/${R.raw.instruct_test}")
             videoView.setVideoURI(uri)
-            videoView.setOnPreparedListener { it.isLooping = true }
+            videoView.setOnPreparedListener { mediaPlayer ->
+                mediaPlayer.isLooping = true
+            }
+            previewContainer.setOnClickListener {
+                previewContainer.visibility = View.GONE
+                videoView.visibility = View.VISIBLE
+                videoView.start()
+            }
         } catch (e: Exception) {
             // 如果找不到影片，就把它藏起來
             videoView.visibility = View.GONE
+            previewContainer.visibility = View.GONE
         }
 
         // --- 底部導覽列跳轉 ---

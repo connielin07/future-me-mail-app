@@ -4,4 +4,6 @@
     <string name="test_name_d">Hi I am D</string>
     <string name="test_name_c">Hi I am C</string>
     <string name="test_name_a">Hi I am A</string>
+    <string name="content_desc_video_thumbnail">教學影片縮圖</string>
+    <string name="content_desc_play_video">播放教學影片</string>
 </resources>

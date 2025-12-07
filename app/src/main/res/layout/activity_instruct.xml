@@ -82,12 +82,42 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
-            <!-- 教學影片 (位置在中間、可捲動到) -->
+            <!-- 教學影片縮圖 (FrameLayout 嵌入縮圖與播放圖示) -->
+            <FrameLayout
+                android:id="@+id/videoPreviewContainer"
+                android:layout_width="match_parent"
+                android:layout_height="210dp"
+                android:layout_marginBottom="16dp"
+                android:background="@android:color/black"
+                android:clickable="true"
+                android:focusable="true">
+
+                <ImageView
+                    android:id="@+id/imgVideoThumbnail"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:contentDescription="@string/content_desc_video_thumbnail"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/instruct_thumbnail" />
+
+                <ImageView
+                    android:id="@+id/imgPlayOverlay"
+                    android:layout_width="64dp"
+                    android:layout_height="64dp"
+                    android:layout_gravity="center"
+                    android:alpha="0.9"
+                    android:contentDescription="@string/content_desc_play_video"
+                    android:src="@android:drawable/ic_media_play" />
+
+            </FrameLayout>
+
+            <!-- 實際播放用的 VideoView，預設隱藏，程式碼中點擊縮圖後再顯示與播放 -->
             <VideoView
                 android:id="@+id/videoTutorial"
                 android:layout_width="match_parent"
-                android:layout_height="300dp"
-                android:layout_marginBottom="30dp" />
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="30dp"
+                android:visibility="gone" />
 
         </LinearLayout>
     </ScrollView>
