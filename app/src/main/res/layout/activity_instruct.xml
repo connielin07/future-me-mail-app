@@ -98,7 +98,7 @@
                     android:layout_height="match_parent"
                     android:contentDescription="@string/content_desc_video_thumbnail"
                     android:scaleType="centerCrop"
-                    android:src="@drawable/instruct_thumbnail" />
+                    android:src="@drawable/instruct_thubnail" />
 
                 <ImageView
                     android:id="@+id/imgPlayOverlay"
