@@ -3,6 +3,7 @@ import dayjs from "dayjs";
 import utc from "dayjs/plugin/utc.js";
 import timezone from "dayjs/plugin/timezone.js";
 import mysql from "mysql2/promise";
+import nodemailer from "nodemailer";
 import admin from "firebase-admin";
 import dotenv from "dotenv";
 
@@ -41,6 +42,63 @@ async function markDelivered(id) {
     await pool.execute("UPDATE future_mail SET delivered = 1, delivered_at = CURRENT_TIMESTAMP WHERE id = ?", [id]);
   } catch (err) {
     console.error(`[scheduler] Failed to mark mail ${id} as delivered:`, err);
+  }
+}
+
+function createSmtpTransport() {
+  if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
+    console.warn("[scheduler] Missing SMTP configuration, skip email delivery.");
+    return null;
+  }
+
+  return nodemailer.createTransport({
+    host: process.env.SMTP_HOST,
+    port: Number(process.env.SMTP_PORT || 587),
+    secure: process.env.SMTP_SECURE === "true",
+    auth: {
+      user: process.env.SMTP_USER,
+      pass: process.env.SMTP_PASS
+    }
+  });
+}
+
+async function sendEmailNotification(mail) {
+  if (!mail.email) {
+    console.warn(`[scheduler] Mail ${mail.id} missing email address, skip email.`);
+    return false;
+  }
+
+  const transporter = createSmtpTransport();
+
+  if (!transporter) {
+    return false;
+  }
+
+  const subject = `FutureMe 未來信件：「${mail.subject || "無主題"}」已抵達`;
+  const plainBody = [
+    "你好，這裡是 FutureMe 未來信",
+    "",
+    `主題：${mail.subject || "無主題"}`,
+    `寄達日期：${mail.receiveDate}`,
+    "",
+    "內容：",
+    mail.content || "",
+    "",
+    "祝一切順利！"
+  ].join("\n");
+
+  try {
+    await transporter.sendMail({
+      from: process.env.SMTP_FROM || process.env.SMTP_USER,
+      to: mail.email,
+      subject,
+      text: plainBody
+    });
+    console.log(`[scheduler] Email notification sent for mail ${mail.id} to ${mail.email}.`);
+    return true;
+  } catch (err) {
+    console.error(`[scheduler] Failed to send email for mail ${mail.id}:`, err);
+    return false;
   }
 }
 
@@ -99,9 +157,15 @@ async function handleDailyDelivery() {
 
     for (const mail of rows) {
       console.log(`[scheduler] Mail ${mail.id} scheduled for delivery. Subject="${mail.subject}" Email="${mail.email || "N/A"}"`);
-      const sent = await sendPushNotification(mail);
-      if (sent) {
+      const [pushSent, emailSent] = await Promise.all([
+        sendPushNotification(mail),
+        sendEmailNotification(mail)
+      ]);
+
+      if (pushSent || emailSent) {
         await markDelivered(mail.id);
+      } else {
+        console.warn(`[scheduler] Mail ${mail.id} delivery skipped because both push/email failed.`);
       }
     }
   } catch (err) {

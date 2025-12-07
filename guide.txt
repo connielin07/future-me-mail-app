@@ -9,6 +9,8 @@ FutureMe 後端部署待辦
    - 進入後端目錄：`cd ~/FutureMeMailApp/server`  
    - 安裝套件：`npm install`（包含 express、mysql2、firebase-admin…）。  
    - 建立環境檔：`cp .env.example .env` 後填入 `PORT`, `DB_*`, `SMTP_*`；`DB_PASS` 必須與資料庫實際密碼一致；`GOOGLE_APPLICATION_CREDENTIALS` 指向 FCM 服務帳戶 JSON 路徑。
+   - 使用 Gmail 作為 SMTP 時須至 Google 帳戶 > 安全性，啟用兩步驟驗證後建立應用程式密碼，並將 `SMTP_USER` 設為完整 Gmail、`SMTP_PASS` 設為該應用程式密碼；若想自訂寄件者顯示名稱可另外設定 `SMTP_FROM`。
+   - 若改用 Resend：先在 Resend 後台新增/驗證 `futuremail.cocotoget.com`（或上層網域），依指示設定 TXT/CNAME/MX；通過驗證後建立 Sending access API Key，並於 `.env` 填 `SMTP_HOST=smtp.resend.com`, `SMTP_PORT=465`, `SMTP_SECURE=true`, **`SMTP_USER=resend`**, `SMTP_PASS=<Resend API Key>`，以及 `SMTP_FROM="FutureMe <no-reply@futuremail.cocotoget.com>"`（FROM 用你已驗證網域的寄件位址）；最後 `pm2 restart futureme-worker --update-env` 讓排程讀到最新設定。
    - 在伺服器建立 `~/FutureMeMailApp/server/keys/`，把 Firebase 服務帳戶 JSON 放在此資料夾並 `chmod 600`，.env 指到該路徑。
 
 2. 確認 MariaDB 設定  
@@ -83,10 +85,5 @@ FutureMe 後端部署待辦
 5. 常駐與監控  
    - 啟動：`pm2 start src/index.js --name futureme-api --cwd ~/FutureMeMailApp/server`  
    - 儲存並設定開機自動啟動：`pm2 save` 後執行 `sudo env PATH=$PATH:/usr/bin pm2 startup systemd -u connie --hp /home/connie`  
-   - 若需每日推播排程：`pm2 start src/scheduler.js --name futureme-worker --cwd ~/FutureMeMailApp/server`（會在台灣時間每日 09:00 執行，採 data-only FCM 推播，App 端 `FutureMessagingService` 會接收並顯示通知，點擊後開啟 OverviewActivity）  
+   - 若需每日推播排程：`pm2 start src/scheduler.js --name futureme-worker --cwd ~/FutureMeMailApp/server`（會在台灣時間每日 09:00 執行，採 data-only FCM 推播，App 端 `FutureMessagingService` 會接收並顯示通知，點擊後開啟 OverviewActivity；同時會透過 SMTP 把信件內容寄到使用者填寫的 Gmail）  
    - 監控：`pm2 status`、`pm2 logs futureme-api`、`pm2 logs futureme-worker`、`mysql -u futureme -p futureme -e "SELECT COUNT(*) FROM future_mail;"`。
-
-6. Android App：教學影片縮圖 + 播放  
-   - 版面：`app/src/main/res/layout/activity_instruct.xml` 以 `FrameLayout` 包住縮圖 `@drawable/instruct_thumbnail`（置中播放圖示 `@android:drawable/ic_media_play`），實際 `VideoView` 預設 `gone`。  
-   - 字串：`app/src/main/res/values/strings.xml` 新增無障礙描述 `content_desc_video_thumbnail`、`content_desc_play_video`。  
-   - 行為：`app/src/main/java/com/example/futurememailapp/InstructActivity.kt` 掛上 `videoPreviewContainer` click listener，點擊後隱藏縮圖、顯示 `VideoView` 並播放 `R.raw.instruct_test`，失敗時則隱藏縮圖與播放器避免黑框。
