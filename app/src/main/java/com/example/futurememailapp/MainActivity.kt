@@ -5,10 +5,13 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.futurememailapp.utils.ThemeHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
@@ -19,6 +22,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        // 先套用目前儲存的日/夜模式
+        ThemeHelper.applySavedTheme(this)
+
         setContentView(R.layout.activity_main)
         ensureNotificationPermission()
 
@@ -31,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         btnGoWrite.setOnClickListener {
             startActivity(Intent(this, WriteActivity::class.java))
         }
+
         // --- 按鈕跳轉操作教學頁 ---
         val btnGoTutorial = findViewById<Button>(R.id.btnGoTutorial)
         btnGoTutorial.setOnClickListener {
@@ -62,6 +70,29 @@ class MainActivity : AppCompatActivity() {
                 }
                 else -> false
             }
+        }
+    }
+
+    // 右上角齒輪選單：載入 menu_main
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.menu_main, menu)
+        return true
+    }
+
+    // 點選齒輪選單項目時的處理
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.action_toggle_theme -> {
+                // 日/夜切換
+                ThemeHelper.toggleTheme(this)
+                true
+            }
+            R.id.action_language -> {
+                // 先留給學妹做語言切換，這裡只佔位
+                // TODO: 實作語言切換
+                true
+            }
+            else -> super.onOptionsItemSelected(item)
         }
     }
 
