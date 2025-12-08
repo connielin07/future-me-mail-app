@@ -16,7 +16,8 @@
         app:titleTextColor="?attr/colorOnPrimary"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:menu="@menu/menu_main" />
 
     <!-- 上方內容：首頁主畫面 -->
     <ScrollView
@@ -40,7 +41,7 @@
                 android:id="@+id/tvQuote"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="生活總是匆匆向前走，有時我們來不及停下腳步，\n好好聽聽自己此刻的心情。\n\n於是，我們把那些想說的話、想記住的瞬間、\n還有努力生活的痕跡交給時間。\n\n寫下一封給未來自己的信，\n或許是提醒、是期待、是願望、\n也可能只是想告訴未來的自己：\n——你一路走到這裡，真的很不容易。\n\n當某一天通知響起，\n那封來自過去的心意將再次被打開，\n提醒你：你一直在成長，也一直在陪伴自己。"
+                android:text="生活總是匆匆向前走，有時我們來不及停下腳步，&#10;好好聽聽自己此刻的心情。&#10;&#10;於是，我們把那些想說的話、想記住的瞬間、&#10;還有努力生活的痕跡交給時間。&#10;&#10;寫下一封給未來自己的信，&#10;或許是提醒、是期待、是願望、&#10;也可能只是想告訴未來的自己：&#10;——你一路走到這裡，真的很不容易。&#10;&#10;當某一天通知響起，&#10;那封來自過去的心意將再次被打開，&#10;提醒你：你一直在成長，也一直在陪伴自己。"
                 android:textSize="16sp"
                 android:lineSpacingExtra="4dp"
                 android:layout_marginBottom="24dp" />
