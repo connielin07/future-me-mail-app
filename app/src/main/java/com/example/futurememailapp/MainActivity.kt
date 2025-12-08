@@ -21,90 +21,72 @@ class MainActivity : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { /* no-op */ }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
 
-        // 先套用目前儲存的日/夜模式
+        //進入 App 先套用儲存的日夜模式
         ThemeHelper.applySavedTheme(this)
 
+        super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         ensureNotificationPermission()
 
-        // 1. 找到並啟用我們自己的 Toolbar
+        //啟用自訂 Toolbar
         val toolbar: MaterialToolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
 
-        // --- 按鈕跳轉寫信頁 ---
+        // ➤ 跳到寫信頁
         val btnGoWrite = findViewById<Button>(R.id.btnGoWrite)
         btnGoWrite.setOnClickListener {
             startActivity(Intent(this, WriteActivity::class.java))
         }
 
-        // --- 按鈕跳轉操作教學頁 ---
+        // ➤ 跳到教學頁
         val btnGoTutorial = findViewById<Button>(R.id.btnGoTutorial)
         btnGoTutorial.setOnClickListener {
             startActivity(Intent(this, InstructActivity::class.java))
         }
 
-        // --- 底部導覽列 ---
+        // ─── Bottom Navigation ───
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-
-        // 預設選中 MainActivity 頁（亮起）
         bottomNavigationView.selectedItemId = R.id.nav1
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav1 -> { // Home（當前頁，不跳）
-                    true
-                }
-                R.id.nav2 -> { // Instruct
-                    startActivity(Intent(this, InstructActivity::class.java))
-                    true
-                }
-                R.id.nav3 -> { // Write
-                    startActivity(Intent(this, WriteActivity::class.java))
-                    true
-                }
-                R.id.nav4 -> { // Overview
-                    startActivity(Intent(this, OverviewActivity::class.java))
-                    true
-                }
+                R.id.nav1 -> true                          // Home（留在這頁）
+                R.id.nav2 -> { startActivity(Intent(this, InstructActivity::class.java)); true }
+                R.id.nav3 -> { startActivity(Intent(this, WriteActivity::class.java)); true }
+                R.id.nav4 -> { startActivity(Intent(this, OverviewActivity::class.java)); true }
                 else -> false
             }
         }
     }
 
-    // 右上角齒輪選單：載入 menu_main
+    // 右上齒輪選單 (載入 menu_main.xml)
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
-    // 點選齒輪選單項目時的處理
+    // 點齒輪 ➜ 進入設定頁（含日夜、語言切換 UI）
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_toggle_theme -> {
-                // 日/夜切換
-                ThemeHelper.toggleTheme(this)
-                true
-            }
-            R.id.action_language -> {
-                // 先留給學妹做語言切換，這裡只佔位
-                // TODO: 實作語言切換
+            R.id.action_settings -> {
+                startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
             else -> super.onOptionsItemSelected(item)
         }
     }
 
+    // Android 13+ 啟用推播權限
     private fun ensureNotificationPermission() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
             val granted = ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.POST_NOTIFICATIONS
             ) == PackageManager.PERMISSION_GRANTED
-            if (!granted) {
-                requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
-            }
+
+            if (!granted) requestNotificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS)
         }
     }
 }

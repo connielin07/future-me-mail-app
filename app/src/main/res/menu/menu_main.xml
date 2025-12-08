@@ -1,16 +1,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- 日 / 夜切換（齒輪 icon） -->
+    <!-- 齒輪：打開設定頁 -->
     <item
-        android:id="@+id/action_toggle_theme"
-        android:title="日 / 夜"
+        android:id="@+id/action_settings"
+        android:title="設定"
         android:icon="@drawable/ic_settings"
         app:showAsAction="always" />
 
-    <!-- 語言切換 -->
-    <item
-        android:id="@+id/action_language"
-        android:title="中 / Eng"
-        app:showAsAction="never" />
 </menu>
