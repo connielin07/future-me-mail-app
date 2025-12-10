@@ -62,7 +62,7 @@ class MainActivity : AppCompatActivity() {
             // 隱藏按鈕
             btnGoTutorial.visibility = View.GONE
             
-            startActivity(Intent(this, InstructActivity::class.java))
+            startActivity(Intent(this, OnboardingActivity::class.java))
         }
 
         // --- 底部導覽列 ---
