@@ -7,6 +7,7 @@ import android.os.Build
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import android.view.View
 import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
@@ -16,6 +17,13 @@ import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
 
 class MainActivity : AppCompatActivity() {
+
+    companion object {
+        // 使用靜態變數記錄本次 App 執行期間是否已點擊過
+        // 只要 App 進程還活著，這個變數就會記住狀態
+        // 重啟 App (殺後台或重新執行) 才會重置
+        private var hasClickedTutorialSession = false
+    }
 
     private val requestNotificationPermission =
         registerForActivityResult(ActivityResultContracts.RequestPermission()) { /* no-op */ }
@@ -41,8 +49,20 @@ class MainActivity : AppCompatActivity() {
 
         // --- 按鈕跳轉操作教學頁 ---
         val btnGoTutorial = findViewById<Button>(R.id.btnGoTutorial)
+
+        // 如果本次執行期間已經點過，就直接隱藏
+        if (hasClickedTutorialSession) {
+            btnGoTutorial.visibility = View.GONE
+        }
+
         btnGoTutorial.setOnClickListener {
-            startActivity(Intent(this, InstructActivity::class.java))
+            // 記錄本次已點擊
+            hasClickedTutorialSession = true
+            
+            // 隱藏按鈕
+            btnGoTutorial.visibility = View.GONE
+            
+            startActivity(Intent(this, OnboardingActivity::class.java))
         }
 
         // --- 底部導覽列 ---

@@ -32,6 +32,7 @@
         <activity android:name=".WriteActivity" />
         <activity android:name=".OverviewActivity" />
         <activity android:name=".LetterDetailActivity" />
+        <activity android:name=".OnboardingActivity" />
 
         <service
             android:name=".FutureMessagingService"
