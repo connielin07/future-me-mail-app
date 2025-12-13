@@ -12,6 +12,7 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.futurememailapp.utils.LanguageHelper
 import com.example.futurememailapp.utils.ThemeHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -33,6 +34,9 @@ class MainActivity : AppCompatActivity() {
 
         // 套用目前儲存的日/夜模式
         ThemeHelper.applySavedTheme(this)
+
+        // 套用目前儲存的語言（中/英文）
+        LanguageHelper.applySavedLanguage(this)
 
         setContentView(R.layout.activity_main)
         ensureNotificationPermission()
@@ -58,10 +62,10 @@ class MainActivity : AppCompatActivity() {
         btnGoTutorial.setOnClickListener {
             // 記錄本次已點擊
             hasClickedTutorialSession = true
-            
+
             // 隱藏按鈕
             btnGoTutorial.visibility = View.GONE
-            
+
             startActivity(Intent(this, OnboardingActivity::class.java))
         }
 
@@ -93,18 +97,18 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
-    // 右上角齒輪選單：載入 menu_main
+    // 右上角選單：載入 menu_main
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
     }
 
-    // 點選齒輪裡的項目
+    // 點選 ⋮ 裡的項目
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             // 這裡要跟 menu_main.xml 的 id 對到：action_settings
             R.id.action_settings -> {
-                // 開啟我們剛做好的設定頁（SettingsActivity）
+                // 開啟設定頁（SettingsActivity）
                 startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
