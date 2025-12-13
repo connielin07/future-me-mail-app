@@ -1,8 +1,10 @@
 package com.example.futurememailapp.utils
 
+
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
+
 
 object LanguageHelper {
     private const val PREFS = "app_settings"
