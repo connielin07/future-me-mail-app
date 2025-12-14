@@ -40,14 +40,14 @@
                 android:textSize="16sp"
                 android:layout_marginBottom="8dp" />
 
+            <!-- 語言切換 -->
             <Button
                 android:id="@+id/btnToggleTheme"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="切換日 / 夜模式"
-                android:layout_marginBottom="24dp" />
+                android:layout_marginBottom="24dp"
+                android:text="切換日 / 夜模式" />
 
-            <!-- 語言切換 -->
             <TextView
                 android:id="@+id/tvLanguageLabel"
                 android:layout_width="wrap_content"

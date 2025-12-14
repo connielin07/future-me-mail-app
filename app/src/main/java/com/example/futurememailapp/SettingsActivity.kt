@@ -13,7 +13,7 @@ class SettingsActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 一進來就先套用目前的主題與語言（避免閃爍）
+        // 一進來就先套用目前的主題與語言
         ThemeHelper.applySavedTheme(this)
         LanguageHelper.applySavedLanguage(this)
 
