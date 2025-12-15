@@ -5,9 +5,9 @@ import android.widget.Button
 import android.widget.RadioButton
 import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
-import com.example.futurememailapp.utils.LanguageHelper
 import com.example.futurememailapp.utils.ThemeHelper
 import com.google.android.material.appbar.MaterialToolbar
+import com.example.futurememailapp.utils.LanguageHelper
 
 class SettingsActivity : AppCompatActivity() {
 
@@ -50,7 +50,7 @@ class SettingsActivity : AppCompatActivity() {
         rgLanguage.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rbChinese -> {
-                    LanguageHelper.setLanguage(this, "zh-Hant")
+                    LanguageHelper.setLanguage(this, "zh-TW")
                     recreate()
                 }
                 R.id.rbEnglish -> {

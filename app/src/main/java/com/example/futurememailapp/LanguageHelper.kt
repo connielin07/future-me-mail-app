@@ -1,10 +1,8 @@
 package com.example.futurememailapp.utils
 
-
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.os.LocaleListCompat
-
 
 object LanguageHelper {
     private const val PREFS = "app_settings"
@@ -12,13 +10,13 @@ object LanguageHelper {
 
     fun applySavedLanguage(context: Context) {
         val tag = context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            .getString(KEY_LANG, "zh-Hant") ?: "zh-Hant"
+            .getString(KEY_LANG, "zh-TW") ?: "zh-TW"
         apply(tag)
     }
 
     fun getSavedLanguage(context: Context): String {
         return context.getSharedPreferences(PREFS, Context.MODE_PRIVATE)
-            .getString(KEY_LANG, "zh-Hant") ?: "zh-Hant"
+            .getString(KEY_LANG, "zh-TW") ?: "zh-TW"
     }
 
     fun setLanguage(context: Context, languageTag: String) {
