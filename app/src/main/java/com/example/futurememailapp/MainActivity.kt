@@ -12,11 +12,10 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.futurememailapp.utils.LanguageHelper
 import com.example.futurememailapp.utils.ThemeHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.example.futurememailapp.utils.LanguageHelper
-
 
 class MainActivity : AppCompatActivity() {
 
@@ -107,12 +106,20 @@ class MainActivity : AppCompatActivity() {
     // 點選 ⋮ 裡的項目
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            // 這裡要跟 menu_main.xml 的 id 對到：action_settings
+
+            // 設定
             R.id.action_settings -> {
-                // 開啟設定頁（SettingsActivity）
                 startActivity(Intent(this, SettingsActivity::class.java))
                 true
             }
+
+            //系統資訊
+            R.id.action_system_info -> {
+                // 你指定要連到 activity_settings.xml → SettingsActivity
+                startActivity(Intent(this, SettingsActivity::class.java))
+                true
+            }
+
             else -> super.onOptionsItemSelected(item)
         }
     }
