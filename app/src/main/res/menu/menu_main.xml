@@ -2,6 +2,7 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
+    <!-- 介面主題（保留子選單與單選設定） -->
     <item
         android:id="@+id/action_theme"
         android:title="介面主題"
@@ -9,6 +10,7 @@
 
         <menu>
             <group android:checkableBehavior="single">
+
                 <item
                     android:id="@+id/action_theme_light"
                     android:title="淺色模式"
@@ -18,9 +20,16 @@
                     android:id="@+id/action_theme_dark"
                     android:title="深色模式"
                     android:checkable="true" />
+
             </group>
         </menu>
 
     </item>
+
+    <!-- 新增：系統資訊（與介面主題同一層） -->
+    <item
+        android:id="@+id/action_system_info"
+        android:title="系統資訊"
+        app:showAsAction="never" />
 
 </menu>

@@ -12,10 +12,10 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import com.example.futurememailapp.utils.LanguageHelper
 import com.example.futurememailapp.utils.ThemeHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
-import com.example.futurememailapp.utils.LanguageHelper
 
 class MainActivity : AppCompatActivity() {
 
@@ -32,7 +32,7 @@ class MainActivity : AppCompatActivity() {
         // 套用目前儲存的日/夜模式
         ThemeHelper.applySavedTheme(this)
 
-        // 套用目前儲存的語言（若你之後要放棄語言功能，可把這行刪掉）
+        // 套用目前儲存的語言
         LanguageHelper.applySavedLanguage(this)
 
         setContentView(R.layout.activity_main)
@@ -98,21 +98,29 @@ class MainActivity : AppCompatActivity() {
         return super.onPrepareOptionsMenu(menu)
     }
 
-    // 點選主題選項：直接套用
+    // 點選選單項目
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
 
+            // --- 主題：淺色 ---
             R.id.action_theme_light -> {
                 item.isChecked = true
                 ThemeHelper.setDarkMode(this, false)
-                recreate() //保證立刻刷新畫面
+                recreate() // 保證立刻刷新畫面
                 true
             }
 
+            // --- 主題：深色 ---
             R.id.action_theme_dark -> {
                 item.isChecked = true
                 ThemeHelper.setDarkMode(this, true)
-                recreate() //保證立刻刷新畫面
+                recreate() // 保證立刻刷新畫面
+                true
+            }
+
+            // ✅ 新增：系統資訊
+            R.id.action_system_info -> {
+                startActivity(Intent(this, SystemInfoActivity::class.java))
                 true
             }
 
