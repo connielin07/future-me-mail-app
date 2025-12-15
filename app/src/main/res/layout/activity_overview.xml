@@ -40,7 +40,8 @@
                 app:mcv_showOtherDates="all"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="MissingClass" />
 
             <TextView
                 android:id="@+id/textView"
@@ -59,6 +60,8 @@
                 style="@style/Widget.MaterialComponents.Button.TextButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:minHeight="48dp"
+                android:minWidth="48dp"
                 android:text="排序"
                 app:layout_constraintBottom_toBottomOf="@+id/textView"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -67,7 +70,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lettersRecyclerView"
                 android:layout_width="0dp"
-                android:layout_height="wrap_content" 
+                android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:nestedScrollingEnabled="false"
                 app:layout_constraintBottom_toBottomOf="parent"
