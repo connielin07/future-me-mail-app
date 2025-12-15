@@ -12,17 +12,14 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.futurememailapp.utils.LanguageHelper
 import com.example.futurememailapp.utils.ThemeHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.example.futurememailapp.utils.LanguageHelper
 
 class MainActivity : AppCompatActivity() {
 
     companion object {
-        // 使用靜態變數記錄本次 App 執行期間是否已點擊過
-        // 只要 App 進程還活著，這個變數就會記住狀態
-        // 重啟 App (殺後台或重新執行) 才會重置
         private var hasClickedTutorialSession = false
     }
 
@@ -35,13 +32,12 @@ class MainActivity : AppCompatActivity() {
         // 套用目前儲存的日/夜模式
         ThemeHelper.applySavedTheme(this)
 
-        // 套用目前儲存的語言（中/英文）
+        // 套用目前儲存的語言（若你之後要放棄語言功能，可把這行刪掉）
         LanguageHelper.applySavedLanguage(this)
 
         setContentView(R.layout.activity_main)
         ensureNotificationPermission()
 
-        // 啟用自訂 Toolbar
         val toolbar: MaterialToolbar = findViewById(R.id.toolbar_main)
         setSupportActionBar(toolbar)
 
@@ -54,41 +50,32 @@ class MainActivity : AppCompatActivity() {
         // --- 按鈕跳轉操作教學頁 ---
         val btnGoTutorial = findViewById<Button>(R.id.btnGoTutorial)
 
-        // 如果本次執行期間已經點過，就直接隱藏
         if (hasClickedTutorialSession) {
             btnGoTutorial.visibility = View.GONE
         }
 
         btnGoTutorial.setOnClickListener {
-            // 記錄本次已點擊
             hasClickedTutorialSession = true
-
-            // 隱藏按鈕
             btnGoTutorial.visibility = View.GONE
-
             startActivity(Intent(this, OnboardingActivity::class.java))
         }
 
         // --- 底部導覽列 ---
         val bottomNavigationView = findViewById<BottomNavigationView>(R.id.bottomNavigationView)
-
-        // 預設選中首頁
         bottomNavigationView.selectedItemId = R.id.nav1
 
         bottomNavigationView.setOnItemSelectedListener { item ->
             when (item.itemId) {
-                R.id.nav1 -> { // Home（當前頁，不跳）
-                    true
-                }
-                R.id.nav2 -> { // Instruct
+                R.id.nav1 -> true
+                R.id.nav2 -> {
                     startActivity(Intent(this, InstructActivity::class.java))
                     true
                 }
-                R.id.nav3 -> { // Write
+                R.id.nav3 -> {
                     startActivity(Intent(this, WriteActivity::class.java))
                     true
                 }
-                R.id.nav4 -> { // Overview
+                R.id.nav4 -> {
                     startActivity(Intent(this, OverviewActivity::class.java))
                     true
                 }
@@ -103,20 +90,29 @@ class MainActivity : AppCompatActivity() {
         return true
     }
 
-    // 點選 ⋮ 裡的項目
+    // 讓下拉選單自動勾選目前狀態
+    override fun onPrepareOptionsMenu(menu: Menu): Boolean {
+        val isDark = ThemeHelper.isDarkMode(this)
+        menu.findItem(R.id.action_theme_dark)?.isChecked = isDark
+        menu.findItem(R.id.action_theme_light)?.isChecked = !isDark
+        return super.onPrepareOptionsMenu(menu)
+    }
+
+    // 點選主題選項：直接套用
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
 
-            // 設定
-            R.id.action_settings -> {
-                startActivity(Intent(this, SettingsActivity::class.java))
+            R.id.action_theme_light -> {
+                item.isChecked = true
+                ThemeHelper.setDarkMode(this, false)
+                recreate() // ✅ 保證立刻刷新畫面
                 true
             }
 
-            //系統資訊
-            R.id.action_system_info -> {
-                // 你指定要連到 activity_settings.xml → SettingsActivity
-                startActivity(Intent(this, SettingsActivity::class.java))
+            R.id.action_theme_dark -> {
+                item.isChecked = true
+                ThemeHelper.setDarkMode(this, true)
+                recreate() // ✅ 保證立刻刷新畫面
                 true
             }
 

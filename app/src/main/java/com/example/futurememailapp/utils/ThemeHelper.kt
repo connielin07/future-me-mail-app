@@ -1,6 +1,5 @@
 package com.example.futurememailapp.utils
 
-import android.app.Activity
 import android.content.Context
 import androidx.appcompat.app.AppCompatDelegate
 
@@ -15,39 +14,31 @@ object ThemeHelper {
      * 用來套用上次儲存的日/夜模式
      */
     fun applySavedTheme(context: Context) {
-        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val isDarkMode = prefs.getBoolean(KEY_DARK_MODE, false)
-
+        val isDark = isDarkMode(context)
         AppCompatDelegate.setDefaultNightMode(
-            if (isDarkMode) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
+            if (isDark) AppCompatDelegate.MODE_NIGHT_YES
+            else AppCompatDelegate.MODE_NIGHT_NO
         )
     }
 
     /**
-     * 切換日/夜模式，並且重啟畫面讓顏色生效
+     * ✅ 讓 MainActivity.onPrepareOptionsMenu() 可以讀取目前儲存的模式
      */
-    fun toggleTheme(activity: Activity) {
-        val prefs = activity.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
-        val isDarkMode = prefs.getBoolean(KEY_DARK_MODE, false)
-        val newIsDark = !isDarkMode
+    fun isDarkMode(context: Context): Boolean {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        return prefs.getBoolean(KEY_DARK_MODE, false)
+    }
 
-        // 存新狀態
-        prefs.edit().putBoolean(KEY_DARK_MODE, newIsDark).apply()
+    /**
+     * ✅ 讓 MainActivity.onOptionsItemSelected() 可以直接切換並儲存
+     */
+    fun setDarkMode(context: Context, isDark: Boolean) {
+        val prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE)
+        prefs.edit().putBoolean(KEY_DARK_MODE, isDark).apply()
 
-        // 套用到 AppCompatDelegate
         AppCompatDelegate.setDefaultNightMode(
-            if (newIsDark) {
-                AppCompatDelegate.MODE_NIGHT_YES
-            } else {
-                AppCompatDelegate.MODE_NIGHT_NO
-            }
+            if (isDark) AppCompatDelegate.MODE_NIGHT_YES
+            else AppCompatDelegate.MODE_NIGHT_NO
         )
-
-        // 重繪目前 Activity，顏色才會刷新
-        activity.recreate()
     }
 }

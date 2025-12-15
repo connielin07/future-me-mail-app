@@ -3,14 +3,24 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <item
-        android:id="@+id/action_settings"
-        android:title="設定"
-        app:showAsAction="never" />
+        android:id="@+id/action_theme"
+        android:title="介面主題"
+        app:showAsAction="never">
 
-    <!--新增：系統資訊（在設定下面）-->
-    <item
-        android:id="@+id/action_system_info"
-        android:title="系統資訊"
-        app:showAsAction="never" />
+        <menu>
+            <group android:checkableBehavior="single">
+                <item
+                    android:id="@+id/action_theme_light"
+                    android:title="淺色模式"
+                    android:checkable="true" />
+
+                <item
+                    android:id="@+id/action_theme_dark"
+                    android:title="深色模式"
+                    android:checkable="true" />
+            </group>
+        </menu>
+
+    </item>
 
 </menu>
