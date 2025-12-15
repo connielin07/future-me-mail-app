@@ -13,7 +13,8 @@
         android:background="?attr/colorPrimary"
         app:title="系統資訊"
         app:titleTextColor="?attr/colorOnPrimary"
-        app:navigationIcon="@drawable/ic_back"
+        app:navigationIcon="?attr/homeAsUpIndicator"
+
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
