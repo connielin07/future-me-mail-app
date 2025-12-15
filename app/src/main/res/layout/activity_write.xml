@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     tools:context=".WriteActivity">
 
+    <!-- 上方工具列 -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_write"
         android:layout_width="0dp"
@@ -14,18 +15,18 @@
         android:background="?attr/colorPrimary"
         app:title="撰寫信件"
         app:titleTextColor="?attr/colorOnPrimary"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 上方內容：使用 ScrollView 避免爆版 -->
+    <!-- 中間可捲動內容 -->
     <ScrollView
         android:id="@+id/scrollWrite"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar_write"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/toolbar_write"
+        app:layout_constraintBottom_toTopOf="@id/bottomNavigationView"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
@@ -118,7 +119,7 @@
                 android:inputType="textEmailAddress"
                 android:layout_marginBottom="16dp" />
 
-            <!-- 送出 / 退出 按鈕區：兩個並排 -->
+            <!-- 送出 / 清空 按鈕 -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -142,5 +143,15 @@
 
         </LinearLayout>
     </ScrollView>
+
+    <!-- 底部導覽列（與 OverviewActivity 完全一致） -->
+    <com.google.android.material.bottomnavigation.BottomNavigationView
+        android:id="@+id/bottomNavigationView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:menu="@menu/bottom_nav_menu" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
