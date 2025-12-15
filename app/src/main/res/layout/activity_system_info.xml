@@ -58,7 +58,7 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- 底部 導覽列 -->
+    <!-- 底部導覽列 -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"
