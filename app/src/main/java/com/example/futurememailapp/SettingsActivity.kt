@@ -7,18 +7,29 @@ import android.widget.RadioGroup
 import androidx.appcompat.app.AppCompatActivity
 import com.example.futurememailapp.utils.LanguageHelper
 import com.example.futurememailapp.utils.ThemeHelper
+import com.google.android.material.appbar.MaterialToolbar
 
 class SettingsActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        // 一進來就先套用目前的主題與語言
+        // 一進來先套用主題與語言
         ThemeHelper.applySavedTheme(this)
         LanguageHelper.applySavedLanguage(this)
 
         setContentView(R.layout.activity_settings)
 
+        // ---------- Toolbar（瀏海頁） ----------
+        val toolbar = findViewById<MaterialToolbar>(R.id.toolbar_settings)
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+
+        toolbar.setNavigationOnClickListener {
+            finish()
+        }
+
+        // ---------- View ----------
         val btnToggleTheme = findViewById<Button>(R.id.btnToggleTheme)
         val rgLanguage = findViewById<RadioGroup>(R.id.rgLanguage)
         val rbChinese = findViewById<RadioButton>(R.id.rbChinese)
@@ -27,16 +38,15 @@ class SettingsActivity : AppCompatActivity() {
         // ---------- 語言初始化 ----------
         when (LanguageHelper.getSavedLanguage(this)) {
             "en" -> rbEnglish.isChecked = true
-            else -> rbChinese.isChecked = true // 預設中文
+            else -> rbChinese.isChecked = true
         }
 
-        // ---------- 日 / 夜模式 ----------
+        // ---------- 日 / 夜切換 ----------
         btnToggleTheme.setOnClickListener {
-            // 直接用你現有的 ThemeHelper
             ThemeHelper.toggleTheme(this)
         }
 
-        // ---------- 中 / 英文切換 ----------
+        // ---------- 中 / 英切換 ----------
         rgLanguage.setOnCheckedChangeListener { _, checkedId ->
             when (checkedId) {
                 R.id.rbChinese -> {
