@@ -25,6 +25,7 @@ object LanguageHelper {
             .putString(KEY_LANG, languageTag)
             .apply()
         apply(languageTag)
+
     }
 
     private fun apply(languageTag: String) {
