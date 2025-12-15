@@ -105,14 +105,14 @@ class MainActivity : AppCompatActivity() {
             R.id.action_theme_light -> {
                 item.isChecked = true
                 ThemeHelper.setDarkMode(this, false)
-                recreate() // ✅ 保證立刻刷新畫面
+                recreate() //保證立刻刷新畫面
                 true
             }
 
             R.id.action_theme_dark -> {
                 item.isChecked = true
                 ThemeHelper.setDarkMode(this, true)
-                recreate() // ✅ 保證立刻刷新畫面
+                recreate() //保證立刻刷新畫面
                 true
             }
 
