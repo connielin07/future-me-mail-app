@@ -84,8 +84,8 @@ class OnboardingActivity : AppCompatActivity() {
         // 處理按鈕點擊
         btnNextOrFinish.setOnClickListener {
             if (viewPager.currentItem == pages.size - 1) {
-                // 最後一頁 -> 完成導覽並跳轉到 InstructActivity
-                navigateToInstructActivity()
+                // 最後一頁 -> 完成導覽並跳轉到 WriteActivity
+                navigateToWriteActivity()
             } else {
                 // 非最後一頁 -> 跳到下一頁
                 viewPager.currentItem = viewPager.currentItem + 1
@@ -93,9 +93,9 @@ class OnboardingActivity : AppCompatActivity() {
         }
     }
 
-    private fun navigateToInstructActivity() {
-        // 跳轉到正式的操作教學頁面
-        startActivity(Intent(this, InstructActivity::class.java))
+    private fun navigateToWriteActivity() {
+        // 跳轉到寫信頁面
+        startActivity(Intent(this, WriteActivity::class.java))
         finish() // 關閉 OnboardingActivity，使用者按返回鍵時不會回到引導頁
     }
 }
