@@ -32,7 +32,12 @@
             android:layout_height="wrap_content"
             app:tabBackground="@drawable/tab_indicator_selector"
             app:tabGravity="center"
-            app:tabIndicatorHeight="0dp"/>
+            app:tabIndicatorHeight="0dp"
+            app:tabMaxWidth="48dp"
+            app:tabMinWidth="48dp"
+            app:tabPaddingStart="0dp"
+            app:tabPaddingEnd="0dp"
+            app:tabRippleColor="@android:color/transparent" />
 
         <View
             android:layout_width="0dp"
