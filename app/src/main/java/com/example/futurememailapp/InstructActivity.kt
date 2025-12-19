@@ -29,7 +29,7 @@ class InstructActivity : AppCompatActivity() {
 
         // 使用 try-catch 保護，避免因為找不到影片檔而崩潰
         try {
-            val uri = Uri.parse("android.resource://${packageName}/${R.raw.instruct_test}")
+            val uri = Uri.parse("android.resource://${packageName}/${R.raw.instruct_demo}")
             videoView.setVideoURI(uri)
             videoView.setOnPreparedListener { mediaPlayer ->
                 mediaPlayer.isLooping = true
