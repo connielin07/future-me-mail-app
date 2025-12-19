@@ -25,14 +25,35 @@ class OnboardingFragment : Fragment() {
         val description = arguments?.getString(ARG_DESCRIPTION)
         val imageResId: Int = arguments?.getInt(ARG_IMAGE_RES, 0) ?: 0
 
-        view.findViewById<TextView>(R.id.tvTitle).text = title
-        view.findViewById<TextView>(R.id.tvDescription).text = description
-
-        // 設定圖片
+        val tvTitle = view.findViewById<TextView>(R.id.tvTitle)
+        val tvDescription = view.findViewById<TextView>(R.id.tvDescription)
         val imageView = view.findViewById<ImageView>(R.id.imgTutorialIcon)
+
+        tvTitle.text = title
+        tvDescription.text = description
+
+        // 設定圖片與版面調整
         if (imageResId != 0) {
+            imageView.visibility = View.VISIBLE
             imageView.setImageResource(imageResId)
             imageView.setBackgroundResource(0) // 移除灰色背景
+            
+            // 有圖片時，文字靠左對齊
+            tvTitle.gravity = android.view.Gravity.START
+            tvDescription.gravity = android.view.Gravity.START
+        } else {
+            // 沒有圖片時 (例如第一頁)，隱藏圖片並將文字置中
+            imageView.visibility = View.GONE
+            
+            tvTitle.gravity = android.view.Gravity.CENTER
+            tvDescription.gravity = android.view.Gravity.CENTER
+            
+            // 讓 LinearLayout 內的所有元件垂直置中
+            (view as? ViewGroup)?.let { layout ->
+                if (layout is android.widget.LinearLayout) {
+                    layout.gravity = android.view.Gravity.CENTER
+                }
+            }
         }
     }
 
