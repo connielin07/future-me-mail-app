@@ -18,6 +18,7 @@ dependencyResolutionManagement {
         mavenCentral()
         maven { url = uri("https://jitpack.io") } // 新增 JitPack 倉庫
     }
+
 }
 
 rootProject.name = "FutureMeMailApp"
