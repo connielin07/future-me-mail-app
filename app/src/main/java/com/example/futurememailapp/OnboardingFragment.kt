@@ -20,7 +20,7 @@ class OnboardingFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        // 從 arguments 取得資料
+        // 從 arguments  取得資料
         val title = arguments?.getString(ARG_TITLE)
         val description = arguments?.getString(ARG_DESCRIPTION)
         val imageResId: Int = arguments?.getInt(ARG_IMAGE_RES, 0) ?: 0
