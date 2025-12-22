@@ -12,7 +12,6 @@ import android.widget.Button
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
-import com.example.futurememailapp.utils.LanguageHelper
 import com.example.futurememailapp.utils.ThemeHelper
 import com.google.android.material.appbar.MaterialToolbar
 import com.google.android.material.bottomnavigation.BottomNavigationView
@@ -32,8 +31,7 @@ class MainActivity : AppCompatActivity() {
         // 套用目前儲存的日/夜模式
         ThemeHelper.applySavedTheme(this)
 
-        // 套用目前儲存的語言
-        LanguageHelper.applySavedLanguage(this)
+
 
         setContentView(R.layout.activity_main)
         ensureNotificationPermission()
