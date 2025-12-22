@@ -32,14 +32,14 @@ class LetterDetailActivity : AppCompatActivity() {
         val deliveryDate = intent.getStringExtra(EXTRA_DELIVERY_DATE)
         val content = intent.getStringExtra(EXTRA_CONTENT) // 新增：接收新的內文資料
         
-        // 5. 將資料設定到畫面上
+        // 5.將資料設定到畫面上
         subjectTextView.text = subject
         writeDateTextView.text = "寫於: $writeDate"
         deliveryDateTextView.text = "預計寄送: $deliveryDate"
         contentTextView.text = content // 新增：設定內文的文字
     }
 
-    // 6. 覆寫這個方法來處理返回箭頭的點擊
+    // 6.覆寫這個方法來處理返回箭頭的點擊
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         if (item.itemId == android.R.id.home) {
             finish()
@@ -48,7 +48,7 @@ class LetterDetailActivity : AppCompatActivity() {
         return super.onOptionsItemSelected(item)
     }
 
-    // 7. 定義所有用來傳遞資料的標籤
+    // 7.定義所有用來傳遞資料的標籤
     companion object {
         const val EXTRA_SUBJECT = "com.example.futurememailapp.EXTRA_SUBJECT"
         const val EXTRA_WRITE_DATE = "com.example.futurememailapp.EXTRA_WRITE_DATE"
