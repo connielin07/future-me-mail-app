@@ -7,13 +7,17 @@ import nodemailer from "nodemailer";
 import admin from "firebase-admin";
 import dotenv from "dotenv";
 
+// 載入 .env 環境變數
 dotenv.config();
 
+// 啟用 dayjs 時區支援
 dayjs.extend(utc);
 dayjs.extend(timezone);
 
+// 台灣時區
 const TAIPEI_TZ = "Asia/Taipei";
 
+// MariaDB 連線池
 const pool = mysql.createPool({
   host: process.env.DB_HOST || "localhost",
   port: Number(process.env.DB_PORT || 3306),
@@ -25,6 +29,7 @@ const pool = mysql.createPool({
   timezone: "Z"
 });
 
+// 初始化 Firebase Admin（使用服務帳戶憑證）
 if (!admin.apps.length) {
   try {
     admin.initializeApp({
@@ -37,6 +42,7 @@ if (!admin.apps.length) {
 
 const messaging = admin.messaging();
 
+// 更新資料庫的已寄送狀態
 async function markDelivered(id) {
   try {
     await pool.execute("UPDATE future_mail SET delivered = 1, delivered_at = CURRENT_TIMESTAMP WHERE id = ?", [id]);
@@ -45,6 +51,7 @@ async function markDelivered(id) {
   }
 }
 
+// 建立 SMTP 連線（若未配置則回傳 null）
 function createSmtpTransport() {
   if (!process.env.SMTP_HOST || !process.env.SMTP_USER || !process.env.SMTP_PASS) {
     console.warn("[scheduler] Missing SMTP configuration, skip email delivery.");
@@ -62,6 +69,7 @@ function createSmtpTransport() {
   });
 }
 
+// 寄送 Email 通知
 async function sendEmailNotification(mail) {
   if (!mail.email) {
     console.warn(`[scheduler] Mail ${mail.id} missing email address, skip email.`);
@@ -102,6 +110,7 @@ async function sendEmailNotification(mail) {
   }
 }
 
+// 發送 FCM 推播通知
 async function sendPushNotification(mail) {
   if (!mail.deviceToken) {
     console.warn(`[scheduler] Mail ${mail.id} missing device token, skip push.`);
@@ -138,6 +147,7 @@ async function sendPushNotification(mail) {
   }
 }
 
+// 每日寄送流程
 async function handleDailyDelivery() {
   const today = dayjs().tz(TAIPEI_TZ).format("YYYY-MM-DD");
   console.log(`[scheduler] Running delivery check for ${today} (UTC${dayjs().tz(TAIPEI_TZ).format("Z")})`);
@@ -162,6 +172,7 @@ async function handleDailyDelivery() {
         sendEmailNotification(mail)
       ]);
 
+      // 只要其中一種成功就標記為已寄送
       if (pushSent || emailSent) {
         await markDelivered(mail.id);
       } else {
@@ -173,6 +184,7 @@ async function handleDailyDelivery() {
   }
 }
 
+// 依排程執行（目前每分鐘一次）
 cron.schedule(
   "* * * * *",
   () => {
