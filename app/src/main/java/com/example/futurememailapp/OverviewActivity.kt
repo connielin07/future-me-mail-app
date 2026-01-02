@@ -368,7 +368,6 @@ class OverviewActivity : AppCompatActivity() {
                 false
             }
         }
-
         // 根據 ViewModel 記錄的排序 index 進行排序
         val sortedLetters = when (viewModel.currentSortIndex) {
             0 -> receivedLetters.sortedByDescending { it.deliveryDate } // 收信日期 新到舊
