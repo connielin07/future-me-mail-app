@@ -1,30 +1,104 @@
+# =========================
+# Version Catalog 設定檔
+# 檔名：libs.versions.toml
+# =========================
+# 功能說明：
+# 此檔案用於集中管理專案中所有套件與外掛的版本號，
+# 透過 Version Catalog 機制達成：
+# 1. 版本統一管理
+# 2. 降低重複宣告版本的風險
+# 3. 提升專案可維護性與可讀性
+# =========================
+
+
+# -------------------------
+# 版本號集中定義區
+# -------------------------
 [versions]
+
+# Android Gradle Plugin 版本
 agp = "8.13.1"
+
+# Kotlin 語言版本
 kotlin = "2.0.21"
+
+# AndroidX Core KTX（Kotlin 擴充）
 coreKtx = "1.17.0"
+
+# 單元測試（JUnit 4）
 junit = "4.13.2"
+
+# AndroidX JUnit（Instrumentation Test）
 junitVersion = "1.3.0"
+
+# Espresso UI 測試工具
 espressoCore = "3.7.0"
+
+# AppCompat（向下相容舊版 Android）
 appcompat = "1.7.1"
+
+# Material Design 元件庫
 material = "1.13.0"
+
+# Activity 元件（Activity Result API 等）
 activity = "1.11.0"
+
+# ConstraintLayout 版面配置工具
 constraintlayout = "2.2.1"
+
+# Firebase BOM（統一 Firebase 相關套件版本）
 firebaseBom = "33.3.0"
+
+# Google Services Gradle Plugin
 googleServices = "4.4.2"
 
+
+# -------------------------
+# 函式庫（Libraries）定義
+# -------------------------
 [libraries]
+
+# AndroidX Core KTX
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
+
+# JUnit 單元測試
 junit = { group = "junit", name = "junit", version.ref = "junit" }
+
+# AndroidX JUnit（Android 測試）
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
+
+# Espresso UI 測試
 androidx-espresso-core = { group = "androidx.test.espresso", name = "espresso-core", version.ref = "espressoCore" }
+
+# AppCompat
 androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+
+# Material Components
 material = { group = "com.google.android.material", name = "material", version.ref = "material" }
+
+# Activity 元件
 androidx-activity = { group = "androidx.activity", name = "activity", version.ref = "activity" }
+
+# ConstraintLayout
 androidx-constraintlayout = { group = "androidx.constraintlayout", name = "constraintlayout", version.ref = "constraintlayout" }
+
+# Firebase BOM（使用 BOM 控制版本）
 firebase-bom = { group = "com.google.firebase", name = "firebase-bom", version.ref = "firebaseBom" }
+
+# Firebase Cloud Messaging（KTX）
 firebase-messaging = { group = "com.google.firebase", name = "firebase-messaging-ktx" }
 
+
+# -------------------------
+# Gradle Plugins 定義
+# -------------------------
 [plugins]
+
+# Android Application Plugin
 android-application = { id = "com.android.application", version.ref = "agp" }
+
+# Kotlin Android Plugin
 kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+
+# Google Services Plugin（Firebase 必需）
 google-services = { id = "com.google.gms.google-services", version.ref = "googleServices" }

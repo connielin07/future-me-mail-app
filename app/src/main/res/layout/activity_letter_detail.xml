@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_letter_detail.xml
+    功能說明：
+    本頁為「信件內容頁」，用於顯示單一封信件的完整資訊，
+    包含信件主旨、撰寫日期、寄送日期與實際內容。
+    版面設計以閱讀體驗為核心，支援長文字捲動顯示。
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,7 +13,12 @@
     android:layout_height="match_parent"
     tools:context=".LetterDetailActivity">
 
-    <!-- 上方工具列 -->
+    <!--
+        MaterialToolbar：信件內容頁的上方工具列
+        - 顯示頁面標題「信件內容」
+        - 使用 Theme 中定義的主色與文字顏色
+        - 與其他頁面共用相同設計語言，維持整體一致性
+    -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
@@ -18,7 +30,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 內容區（ScrollView 直接貼到最底） -->
+    <!--
+        ScrollView：信件內容主要顯示區域
+        - 用於顯示長篇信件內容
+        - padding 提供閱讀時的留白空間
+        - 上方接 Toolbar，下方延伸至畫面底部
+    -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -28,11 +45,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!--
+            LinearLayout（垂直排列）
+            - 作為 ScrollView 的實際內容容器
+            - 依序排列信件主旨、日期資訊與信件內文
+        -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
+            <!--
+                TextView：信件主旨
+                - 使用較大的字體與粗體強調信件標題
+                - 作為整封信的視覺焦點
+                - tools:text 僅用於版面預覽，不影響實際資料
+            -->
             <TextView
                 android:id="@+id/detailSubjectTextView"
                 android:layout_width="match_parent"
@@ -41,6 +69,11 @@
                 android:textStyle="bold"
                 tools:text="給十年後自己的信" />
 
+            <!--
+                TextView：信件撰寫日期
+                - 顯示信件建立的時間點
+                - 使用較淡的文字顏色，作為輔助資訊
+            -->
             <TextView
                 android:id="@+id/detailWriteDateTextView"
                 android:layout_width="wrap_content"
@@ -49,6 +82,11 @@
                 android:textColor="@android:color/darker_gray"
                 tools:text="寫於: 2024-05-20" />
 
+            <!--
+                TextView：信件寄送日期
+                - 顯示預計送達給未來自己的時間
+                - 與撰寫日期區分顯示，幫助使用者理解時間脈絡
+            -->
             <TextView
                 android:id="@+id/detailDeliveryDateTextView"
                 android:layout_width="wrap_content"
@@ -57,6 +95,12 @@
                 android:textColor="@android:color/darker_gray"
                 tools:text="預計寄送: 2034-12-25" />
 
+            <!--
+                TextView：信件內文
+                - 顯示信件的完整文字內容
+                - 設定行距以提升長篇閱讀的舒適度
+                - 文字內容將由程式動態填入
+            -->
             <TextView
                 android:id="@+id/detailContentTextView"
                 android:layout_width="match_parent"

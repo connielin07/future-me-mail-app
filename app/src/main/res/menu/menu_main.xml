@@ -1,21 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    menu_main.xml
+    功能說明：
+    此 menu 檔案用於 App 上方的 MaterialToolbar，
+    屬於「設定／資訊型」選單，而非主要導覽。
+    主要提供：
+    1. 介面主題切換（淺色 / 深色）
+    2. 系統資訊頁入口
+
+    設計原則：
+    - 設定類功能集中於右上角選單
+    - 不佔用 Toolbar 主要操作空間（showAsAction="never"）
+    - 使用子選單與單選群組，確保狀態一致性
+-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <!-- 介面主題（保留子選單與單選設定） -->
+    <!--
+        選單項目：介面主題
+        - 作為父層選單項目
+        - 點擊後展開子選單
+        - 用於切換 App 的整體顯示主題
+    -->
     <item
         android:id="@+id/action_theme"
         android:title="介面主題"
         app:showAsAction="never">
 
+        <!--
+            子選單（menu）
+            - 包含實際可選擇的主題項目
+            - 點擊後由程式碼負責套用對應 Theme
+        -->
         <menu>
+
+            <!--
+                group：主題選項群組
+                - checkableBehavior="single"
+                  確保同一時間只能選擇一種主題
+                - 避免淺色與深色模式同時被勾選
+            -->
             <group android:checkableBehavior="single">
 
+                <!--
+                    子選項：淺色模式
+                    - 可被勾選（checkable="true"）
+                    - 選擇後通常套用 Light Theme
+                -->
                 <item
                     android:id="@+id/action_theme_light"
                     android:title="淺色模式"
                     android:checkable="true" />
 
+                <!--
+                    子選項：深色模式
+                    - 可被勾選（checkable="true"）
+                    - 選擇後通常套用 Dark Theme
+                -->
                 <item
                     android:id="@+id/action_theme_dark"
                     android:title="深色模式"
@@ -26,7 +67,12 @@
 
     </item>
 
-    <!-- 新增：系統資訊（與介面主題同一層） -->
+    <!--
+        選單項目：系統資訊
+        - 與「介面主題」位於同一層級
+        - 點擊後通常導向「系統資訊 / About」頁面
+        - 用於顯示 App 版本、系統需求與技術背景
+    -->
     <item
         android:id="@+id/action_system_info"
         android:title="系統資訊"

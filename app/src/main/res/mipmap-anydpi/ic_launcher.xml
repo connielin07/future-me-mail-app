@@ -1,6 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    ic_launcher.xml（Adaptive Icon）
+    功能說明：
+    此檔案定義 Android App 的「自適應啟動圖示（Adaptive Icon）」，
+    主要用於 Android 8.0（API 26）以上系統。
+
+    Adaptive Icon 特色：
+    - 將圖示拆分為「背景（background）」與「前景（foreground）」
+    - 系統可依不同裝置與桌面樣式（圓形、方形、圓角等）自動裁切
+    - 支援系統動畫與主題效果
+-->
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <!--
+        background：圖示背景層
+        - 通常為純色或簡單背景圖形
+        - 會被系統置於最底層
+        - 建議避免過於複雜的細節
+    -->
     <background android:drawable="@drawable/ic_launcher_background" />
+
+    <!--
+        foreground：圖示前景層
+        - 顯示 App 的主要識別圖樣（Logo）
+        - 會疊加在背景之上
+        - 系統在裁切時主要保留此區域內容
+    -->
     <foreground android:drawable="@drawable/ic_launcher_foreground" />
+
+    <!--
+        monochrome：單色圖示（Android 13+）
+        - 用於系統主題（如單色主題、Material You）
+        - 系統可自動套用使用者選擇的主題色
+        - 通常與 foreground 使用相同資源
+    -->
     <monochrome android:drawable="@drawable/ic_launcher_foreground" />
+
 </adaptive-icon>

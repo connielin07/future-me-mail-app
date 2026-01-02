@@ -1,4 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_write.xml
+    功能說明：
+    本頁為「撰寫信件」頁面，用於建立一封寄給未來自己的信件，
+    主要包含：
+    1. 顯示寫信日期（通常為當天）
+    2. 選擇收信日期（由使用者挑選，作為未來通知/送達時間）
+    3. 輸入信件主旨與內容（核心輸入區）
+    4. 可選填收信人 Email（擴充功能：寄給自己或他人）
+    5. 送出與清空按鈕（主要操作）
+    6. 底部導覽列可切換主要功能頁
+    版面使用 ScrollView 以適應不同螢幕尺寸與鍵盤彈出時的顯示需求。
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,7 +20,12 @@
     android:layout_height="match_parent"
     tools:context=".WriteActivity">
 
-    <!-- 上方工具列 -->
+    <!--
+        MaterialToolbar：撰寫信件頁的上方工具列
+        - 顯示頁面標題「撰寫信件」
+        - 使用 Theme 主色（colorPrimary）與對應文字色（colorOnPrimary）
+        - 與其他頁面維持一致的視覺風格，支援日夜模式
+    -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_write"
         android:layout_width="0dp"
@@ -19,7 +37,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 中間可捲動內容 -->
+    <!--
+        ScrollView：中間可捲動內容區
+        - 讓輸入欄位在小螢幕或鍵盤彈出時仍可完整操作
+        - fillViewport=true 確保內容不足時也能撐滿畫面
+        - 上方接 Toolbar，下方接 BottomNavigationView（底部固定不捲動）
+    -->
     <ScrollView
         android:id="@+id/scrollWrite"
         android:layout_width="0dp"
@@ -30,13 +53,24 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!--
+            LinearLayout（垂直排列）
+            - 作為 ScrollView 的內容容器
+            - 依序放置日期資訊、輸入欄位與操作按鈕
+            - padding 提供整體留白，提升閱讀與輸入體驗
+        -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- 寫信日期 -->
+            <!--
+                寫信日期區塊（水平排列）
+                - 顯示「寫信日期」標籤與日期文字
+                - 讓使用者知道此信件建立的時間點（通常為當天）
+                - 置中對齊（center_vertical）確保文字高度一致
+            -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -44,6 +78,7 @@
                 android:gravity="center_vertical"
                 android:layout_marginBottom="8dp">
 
+                <!-- 寫信日期標籤 -->
                 <TextView
                     android:id="@+id/tvWriteDateLabel"
                     android:layout_width="wrap_content"
@@ -51,6 +86,7 @@
                     android:text="寫信日期"
                     android:textSize="16sp" />
 
+                <!-- 寫信日期（實際值通常由程式碼動態設定） -->
                 <TextView
                     android:id="@+id/tvWriteDate"
                     android:layout_width="wrap_content"
@@ -60,7 +96,12 @@
                     android:textSize="16sp" />
             </LinearLayout>
 
-            <!-- 收信日期   -->
+            <!--
+                收信日期區塊（水平排列）
+                - 顯示「收信日期」標籤與日期文字
+                - 旁邊提供「選擇日期」按鈕，讓使用者挑選未來送達日
+                - 此日期通常會影響排程提醒/通知（由程式碼實作）
+            -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -68,6 +109,7 @@
                 android:gravity="center_vertical"
                 android:layout_marginBottom="16dp">
 
+                <!-- 收信日期標籤 -->
                 <TextView
                     android:id="@+id/tvReceiveDateLabel"
                     android:layout_width="wrap_content"
@@ -75,6 +117,7 @@
                     android:text="收信日期"
                     android:textSize="16sp" />
 
+                <!-- 收信日期（顯示目前選擇結果，實際值由程式碼更新） -->
                 <TextView
                     android:id="@+id/tvReceiveDate"
                     android:layout_width="wrap_content"
@@ -83,6 +126,11 @@
                     android:text="2025-01-01"
                     android:textSize="16sp" />
 
+                <!--
+                    Button：選擇日期
+                    - 點擊後通常會打開 DatePicker（或自訂日期選擇器）
+                    - 選擇完成後，更新 tvReceiveDate 的顯示內容
+                -->
                 <Button
                     android:id="@+id/btnPickReceiveDate"
                     android:layout_width="wrap_content"
@@ -91,7 +139,12 @@
                     android:text="選擇日期" />
             </LinearLayout>
 
-            <!-- 主旨 -->
+            <!--
+                EditText：信件主旨輸入欄位
+                - match_parent 讓輸入區域完整佔滿寬度，方便輸入
+                - minHeight 確保點擊範圍與可用性（避免欄位太矮不好點）
+                - hint 作為提示文字，使用者輸入後會消失
+            -->
             <EditText
                 android:id="@+id/etTitle"
                 android:layout_width="match_parent"
@@ -100,7 +153,12 @@
                 android:hint="信件主旨"
                 android:layout_marginBottom="12dp" />
 
-            <!-- 內容 -->
+            <!--
+                EditText：信件內容輸入欄位
+                - 固定高度 200dp，提供較大的輸入空間
+                - gravity="top" 讓文字從上方開始顯示（符合長文輸入習慣）
+                - inputType="textMultiLine" 支援多行輸入
+            -->
             <EditText
                 android:id="@+id/etContent"
                 android:layout_width="match_parent"
@@ -110,7 +168,12 @@
                 android:inputType="textMultiLine"
                 android:layout_marginBottom="16dp" />
 
-            <!-- Email -->
+            <!--
+                EditText：Email（可選）
+                - 讓使用者可選擇輸入收信人 Email
+                - inputType="textEmailAddress" 觸發適合輸入 Email 的鍵盤與格式
+                - 若未填，通常代表僅做本機提醒/或寄給自己（依專案設計）
+            -->
             <EditText
                 android:id="@+id/etEmail"
                 android:layout_width="match_parent"
@@ -119,7 +182,12 @@
                 android:inputType="textEmailAddress"
                 android:layout_marginBottom="16dp" />
 
-            <!-- 送出 / 清空 按鈕 -->
+            <!--
+                操作按鈕區（水平排列）
+                - 置中顯示「送出」與「清空」
+                - 送出：保存資料 + 排程提醒（由程式碼負責）
+                - 清空：重置輸入欄位，避免誤輸入或想重新開始
+            -->
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -127,6 +195,11 @@
                 android:gravity="center"
                 android:layout_marginTop="8dp">
 
+                <!--
+                    Button：送出
+                    - 主要行動（Primary Action）
+                    - 通常會觸發：驗證 → 儲存 → 排程通知/提醒
+                -->
                 <Button
                     android:id="@+id/btnSend"
                     android:layout_width="wrap_content"
@@ -134,6 +207,11 @@
                     android:text="送出"
                     android:layout_marginEnd="16dp" />
 
+                <!--
+                    Button：清空
+                    - 次要行動（Secondary Action）
+                    - 將主旨/內容/Email 等欄位清空，方便重新輸入
+                -->
                 <Button
                     android:id="@+id/btnClear"
                     android:layout_width="wrap_content"
@@ -144,7 +222,12 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- 底部導覽列（與 OverviewActivity 完全一致） -->
+    <!--
+        BottomNavigationView：底部導覽列
+        - 與其他頁面共用 bottom_nav_menu，維持一致的導覽體驗
+        - 固定在畫面底部，不隨 ScrollView 捲動
+        - 讓使用者可隨時切換到收信總覽、首頁等主要頁面
+    -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"

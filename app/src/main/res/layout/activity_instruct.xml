@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_instruct.xml
+    功能說明：
+    本頁為「操作教學」頁面，主要用途為：
+    1. 以文字步驟說明 App 的使用方式（寫信 / 收信）
+    2. 提供教學影片，協助使用者快速理解實際操作流程
+    3. 採用可捲動版面，確保在不同裝置尺寸下皆可完整閱讀
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,6 +15,12 @@
     android:layout_height="match_parent"
     tools:context=".InstructActivity">
 
+    <!--
+        MaterialToolbar：操作教學頁的上方工具列
+        - 顯示頁面標題「操作教學」
+        - 使用 Theme 中定義的主色與文字顏色
+        - 與首頁 Toolbar 風格一致，維持整體 UI 一致性
+    -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_instruct"
         android:layout_width="0dp"
@@ -18,7 +32,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <!-- 可捲動內容：教學文字 + 教學影片 -->
+    <!--
+        ScrollView：教學內容主要區域
+        - 包含文字教學與影片教學
+        - fillViewport=true，確保內容不足時仍能撐滿畫面
+        - 上方接 Toolbar，下方接 BottomNavigationView
+    -->
     <ScrollView
         android:id="@+id/scrollInstruct"
         android:layout_width="0dp"
@@ -29,13 +48,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!--
+            LinearLayout（垂直排列）
+            - 作為 ScrollView 的內容容器
+            - 依序放置教學標題、教學文字與影片區塊
+            - padding 提供閱讀時的舒適留白
+        -->
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
             android:padding="16dp">
 
-            <!-- 次標題：如何撰寫信件？ -->
+            <!--
+                次標題：如何撰寫信件？
+                - 以較大的字體與粗體呈現
+                - 作為段落區隔，提升教學內容的結構清晰度
+            -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -44,6 +73,12 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
+            <!--
+                教學文字：寫信流程說明
+                - 使用編號步驟，降低使用者理解成本
+                - 以換行符號清楚區隔每個步驟
+                - 說明從進入寫信頁到成功排程提醒的完整流程
+            -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -54,7 +89,11 @@
                 android:textSize="16sp"
                 android:layout_marginBottom="24dp" />
 
-            <!-- 次標題：如何收信？ -->
+            <!--
+                次標題：如何收信？
+                - 與前一段標題風格一致
+                - 清楚區分「寫信」與「收信」兩個使用情境
+            -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -63,6 +102,11 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
+            <!--
+                教學文字：收信流程說明
+                - 說明通知出現、進入 App 與閱讀信件的流程
+                - 協助使用者理解系統提醒機制
+            -->
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -72,7 +116,11 @@
                 android:textSize="16sp"
                 android:layout_marginBottom="24dp" />
 
-            <!-- 教學影片標題 -->
+            <!--
+                教學影片區塊標題
+                - 提供視覺化學習方式
+                - 與文字教學形成互補
+            -->
             <TextView
                 android:id="@+id/tvVideoTitle"
                 android:layout_width="wrap_content"
@@ -82,7 +130,12 @@
                 android:textStyle="bold"
                 android:layout_marginBottom="8dp" />
 
-            <!-- 教學影片縮圖 (FrameLayout 嵌入縮圖與播放圖示) -->
+            <!--
+                教學影片預覽區（FrameLayout）
+                - 以 FrameLayout 疊加縮圖與播放圖示
+                - 預設顯示縮圖，點擊後由程式碼控制播放行為
+                - clickable / focusable 提供良好互動體驗
+            -->
             <FrameLayout
                 android:id="@+id/videoPreviewContainer"
                 android:layout_width="match_parent"
@@ -92,6 +145,11 @@
                 android:clickable="true"
                 android:focusable="true">
 
+                <!--
+                    ImageView：影片縮圖
+                    - centerCrop 確保畫面填滿且不變形
+                    - 作為尚未播放時的視覺預覽
+                -->
                 <ImageView
                     android:id="@+id/imgVideoThumbnail"
                     android:layout_width="match_parent"
@@ -100,6 +158,11 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/instruct_thumbnail" />
 
+                <!--
+                    ImageView：播放圖示
+                    - 疊加在縮圖中央
+                    - 提示使用者可點擊播放影片
+                -->
                 <ImageView
                     android:id="@+id/imgPlayOverlay"
                     android:layout_width="64dp"
@@ -111,7 +174,11 @@
 
             </FrameLayout>
 
-            <!-- 實際播放用的 VideoView，預設隱藏，程式碼中點擊縮圖後再顯示與播放 -->
+            <!--
+                VideoView：實際播放教學影片的元件
+                - 預設為隱藏（gone）
+                - 當使用者點擊影片縮圖後，由 Activity 程式碼控制顯示與播放
+            -->
             <VideoView
                 android:id="@+id/videoTutorial"
                 android:layout_width="match_parent"
@@ -122,7 +189,12 @@
         </LinearLayout>
     </ScrollView>
 
-    <!-- 底部導覽列（永遠固定） -->
+    <!--
+        BottomNavigationView：底部導覽列
+        - 固定顯示於畫面底部
+        - 提供各主要功能頁面的快速切換
+        - 與其他頁面共用相同選單，維持操作一致性
+    -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="0dp"

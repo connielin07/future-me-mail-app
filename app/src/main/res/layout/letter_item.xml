@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    letter_item.xml
+    功能說明：
+    此版型為 RecyclerView 中的單筆信件項目，
+    用於顯示信件列表（如收信總覽 / 信箱頁）中的一封信，
+    主要呈現資訊包含：
+    1. 未讀狀態提示（小圓點）
+    2. 信件主旨
+    3. 寫信日期
+    4. 預計寄送 / 到期日期
+    設計重點為「快速掃描資訊」與「清楚的閱讀層級」。
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,6 +18,13 @@
     android:layout_height="wrap_content"
     android:padding="16dp">
 
+    <!--
+        ImageView：未讀狀態指示點
+        - 當信件尚未閱讀時顯示（通常由程式碼控制 visibility）
+        - 預設為 invisible，避免影響版面配置
+        - 使用小圓點圖示，提供低干擾但明確的狀態提示
+        - 垂直對齊信件主旨文字，維持視覺一致性
+    -->
     <ImageView
         android:id="@+id/unreadDotImageView"
         android:layout_width="wrap_content"
@@ -18,6 +37,13 @@
         app:layout_constraintTop_toTopOf="@+id/letterSubjectTextView"
         tools:visibility="visible" />
 
+    <!--
+        TextView：信件主旨
+        - 列表中最重要的資訊，使用較大字體與粗體呈現
+        - 寬度使用 0dp 搭配 ConstraintLayout，自動撐滿可用空間
+        - 左側避開未讀圓點，右側避開寄送日期
+        - 作為使用者點擊進入信件內容頁的主要視覺焦點
+    -->
     <TextView
         android:id="@+id/letterSubjectTextView"
         android:layout_width="0dp"
@@ -29,6 +55,12 @@
         app:layout_constraintTop_toTopOf="parent"
         tools:text="給十年後自己的信" />
 
+    <!--
+        TextView：寫信日期
+        - 顯示信件建立的時間
+        - 使用較小字體與灰色文字，作為輔助資訊
+        - 排列在主旨下方，形成清楚的資訊層級
+    -->
     <TextView
         android:id="@+id/writeDateTextView"
         android:layout_width="wrap_content"
@@ -40,6 +72,12 @@
         app:layout_constraintTop_toBottomOf="@+id/letterSubjectTextView"
         tools:text="寫於: 2024-05-20" />
 
+    <!--
+        TextView：寄送 / 到期日期
+        - 顯示信件預計送達（或已送達）的日期
+        - 使用綠色系文字，與 App 主題色呼應
+        - 固定對齊右上角，方便快速辨識時間點
+    -->
     <TextView
         android:id="@+id/deliveryDateTextView"
         android:layout_width="wrap_content"

@@ -1,9 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    strings.xml
+    功能說明：
+    此檔案為 Android App 的「字串資源集中管理檔」，
+    主要用途為：
+    1. 統一管理 App 中顯示的文字內容
+    2. 方便日後進行多語系（i18n）擴充
+    3. 提升程式碼可維護性，避免在程式或 XML 中硬編碼文字
+-->
 <resources>
+
+    <!--
+        App 名稱
+        - 顯示於桌面圖示下方、系統設定與近期應用程式中
+    -->
     <string name="app_name">信運草</string>
+
+    <!--
+        測試用字串（測試或範例用途）
+        - 通常用於驗證字串資源是否正確載入
+        - 實際正式版本中可移除或改為有意義的名稱
+    -->
     <string name="test_name_b">Hi, I am B</string>
     <string name="test_name_d">Hi I am D</string>
     <string name="test_name_c">Hi I am C</string>
     <string name="test_name_a">Hi I am A</string>
+
+    <!--
+        無障礙（Accessibility）相關文字
+        - 提供給螢幕閱讀器（TalkBack）使用
+        - 當 ImageView 無法以視覺理解時，能以語音描述其用途
+    -->
     <string name="content_desc_video_thumbnail">教學影片縮圖</string>
+
+    <!--
+        無障礙（Accessibility）相關文字
+        - 描述播放按鈕的功能
+        - 協助視障使用者理解可互動行為
+    -->
     <string name="content_desc_play_video">播放教學影片</string>
+
 </resources>

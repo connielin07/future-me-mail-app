@@ -1,4 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_onboarding.xml
+    功能說明：
+    本頁為 App 的新手引導（Onboarding）頁面，主要用途為：
+    1. 透過多頁滑動方式介紹 App 的核心概念與功能
+    2. 使用 ViewPager2 顯示多個引導畫面
+    3. 搭配頁數指示器（Indicator）與按鈕，引導使用者完成教學流程
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -6,6 +14,13 @@
     android:layout_height="match_parent"
     tools:context=".OnboardingActivity">
 
+    <!--
+        ViewPager2：新手引導主畫面
+        - 用於顯示多個 Onboarding Fragment / 頁面
+        - 支援左右滑動切換
+        - 佔據畫面主要空間
+        - 上方貼齊父容器，下方連接指示器區塊
+    -->
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/viewPagerOnboarding"
         android:layout_width="0dp"
@@ -15,6 +30,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
+    <!--
+        indicatorLayout：頁面指示器與操作按鈕容器
+        - 固定顯示於畫面底部
+        - 以水平 LinearLayout 排列指示器與按鈕
+        - 提供頁面進度提示與下一步操作
+    -->
     <LinearLayout
         android:id="@+id/indicatorLayout"
         android:layout_width="0dp"
@@ -26,6 +47,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!--
+            TabLayout：頁面指示器（圓點 Indicator）
+            - 與 ViewPager2 綁定，顯示目前所在頁數
+            - 使用自訂 tab_indicator_selector 作為圓點樣式
+            - tabIndicatorHeight 設為 0dp，僅顯示自訂背景
+            - 關閉 Ripple 效果，保持視覺簡潔
+        -->
         <com.google.android.material.tabs.TabLayout
             android:id="@+id/tabIndicator"
             android:layout_width="wrap_content"
@@ -39,11 +67,23 @@
             app:tabPaddingEnd="0dp"
             app:tabRippleColor="@android:color/transparent" />
 
+        <!--
+            View（Spacer）
+            - 透過 layout_weight 撐開空間
+            - 將 TabLayout 推至左側、按鈕推至右側
+            - 提升整體版面平衡與可讀性
+        -->
         <View
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
+        <!--
+            Button：下一步 / 完成
+            - 作為使用者主要操作按鈕
+            - 文字會依目前頁數由程式動態切換（如「下一步」→「開始使用」）
+            - 點擊後控制 ViewPager2 前進或結束 Onboarding
+        -->
         <Button
             android:id="@+id/btnNextOrFinish"
             android:layout_width="wrap_content"

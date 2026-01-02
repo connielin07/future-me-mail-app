@@ -1,19 +1,65 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    bottom_nav_menu.xml
+    功能說明：
+    此 menu 檔案用於 BottomNavigationView，
+    定義 App 底部導覽列的各個主要功能入口。
+    每一個 item 對應一個主要頁面（Activity / Fragment），
+    讓使用者可快速在核心功能之間切換。
+
+    導覽結構設計原則：
+    - 功能數量控制在 3～5 個，避免過度擁擠
+    - 依使用流程與使用頻率排列
+    - 搭配 icon + title，提升辨識度
+-->
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:title="Home"
+
+    <!--
+        導覽項目：Home
+        - App 首頁
+        - 作為使用者進入 App 的起始畫面
+        - 通常顯示引導文字或核心概念說明
+    -->
+    <item
+        android:title="Home"
         android:id="@+id/nav1"
         android:icon="@drawable/ic_house_black_24dp"
         />
-    <item android:title="Instruct"
+
+    <!--
+        導覽項目：Instruct
+        - 操作教學頁
+        - 提供新手使用說明與功能引導
+        - 降低首次使用者的學習成本
+    -->
+    <item
+        android:title="Instruct"
         android:id="@+id/nav2"
         android:icon="@drawable/ic_lamp_black_24dp"
         />
-    <item android:title="Write"
+
+    <!--
+        導覽項目：Write
+        - 撰寫信件頁
+        - 屬於 App 的核心功能之一
+        - 讓使用者建立寄給未來自己的信件
+    -->
+    <item
+        android:title="Write"
         android:id="@+id/nav3"
         android:icon="@drawable/ic_write_black_24dp"
         />
-    <item android:title="Overview"
+
+    <!--
+        導覽項目：Overview
+        - 收信總覽 / 信箱頁
+        - 顯示已到期或即將到期的信件清單
+        - 作為查看與閱讀信件的主要入口
+    -->
+    <item
+        android:title="Overview"
         android:id="@+id/nav4"
         android:icon="@drawable/ic_mail_black_24dp"
         />
+
 </menu>

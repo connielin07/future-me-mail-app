@@ -1,6 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    network_security_config.xml
+    功能說明：
+    此檔案用於設定 Android App 的「網路安全政策（Network Security Config）」，
+    控制 App 在進行網路連線時可允許的通訊規則。
+
+    主要用途：
+    - 明確指定哪些網域可以使用明文 HTTP（cleartext）
+    - 避免在正式環境中全面開放不安全的連線
+    - 符合 Android 9（API 28）以上對網路安全的限制規範
+
+    使用情境：
+    - 常見於開發／測試階段
+    - 搭配 Android Emulator 與本機後端服務進行測試
+-->
 <network-security-config>
+
+    <!--
+        domain-config：指定特定網域的網路安全設定
+        - cleartextTrafficPermitted="true"
+          表示允許該網域使用 HTTP（非 HTTPS）連線
+        - 僅對此 domain-config 區塊內指定的網域生效
+    -->
     <domain-config cleartextTrafficPermitted="true">
+
+        <!--
+            domain：允許使用明文連線的網域
+            - 10.0.2.2 為 Android Emulator 對應主機（Host）電腦的特殊 IP
+            - 常用於模擬器連線到本機後端 API（例如 localhost:3000）
+            - 僅建議在開發階段使用，不適合正式上線環境
+        -->
         <domain>10.0.2.2</domain>
+
     </domain-config>
+
 </network-security-config>

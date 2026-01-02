@@ -1,4 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    onboarding_page_item.xml（或教學頁單頁版型）
+    功能說明：
+    此版型通常作為 ViewPager2 中的單一頁面使用，
+    用於呈現 Onboarding / 操作教學的其中一個步驟，
+    包含：
+    1. 教學標題
+    2. 教學描述文字
+    3. 對應的示意圖片或圖示
+    版面設計以「由上而下的閱讀流程」為核心，
+    適合左右滑動逐步引導使用者理解 App 功能。
+-->
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -6,6 +18,12 @@
     android:gravity="center_horizontal"
     android:padding="32dp">
 
+    <!--
+        TextView：教學頁標題
+        - 使用較大的字體與粗體呈現
+        - 作為該教學步驟的重點摘要
+        - 置於畫面上方，符合使用者閱讀順序
+    -->
     <TextView
         android:id="@+id/tvTitle"
         android:layout_width="wrap_content"
@@ -15,14 +33,29 @@
         android:textStyle="bold"
         android:layout_marginBottom="8dp"/>
 
+    <!--
+        TextView：教學描述文字
+        - 用於說明此步驟的操作方式或功能重點
+        - match_parent 寬度讓文字自然換行，提升可讀性
+        - gravity="start" 讓文字靠左對齊，符合閱讀習慣
+        - 下方留白（marginBottom）與圖片區塊區隔
+    -->
     <TextView
         android:id="@+id/tvDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="描述內容描述內容描述內容描述內容描述內容描述內容"
         android:textSize="16sp"
-        android:gravity="start" android:layout_marginBottom="32dp"/>
+        android:gravity="start"
+        android:layout_marginBottom="32dp"/>
 
+    <!--
+        ImageView：教學示意圖片 / 圖示
+        - 使用 layout_weight=1 撐滿剩餘空間，使版面上下平衡
+        - fitCenter 確保圖片完整顯示且不變形
+        - contentDescription 提供無障礙輔助（Accessibility）
+        - 灰色背景作為圖片尚未載入或示意用底色
+    -->
     <ImageView
         android:id="@+id/imgTutorialIcon"
         android:layout_width="match_parent"

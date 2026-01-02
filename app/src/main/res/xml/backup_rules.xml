@@ -1,13 +1,48 @@
-<?xml version="1.0" encoding="utf-8"?><!--
-   Sample backup rules file; uncomment and customize as necessary.
-   See https://developer.android.com/guide/topics/data/autobackup
-   for details.
-   Note: This file is ignored for devices older than API 31
-   See https://developer.android.com/about/versions/12/backup-restore
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    full-backup-content.xml
+    功能說明：
+    此檔案用於設定 Android 的「Auto Backup（自動備份）」規則，
+    控制哪些 App 資料可以被系統備份與還原。
+
+    適用範圍：
+    - 僅適用於 Android 12（API 31）以上裝置
+    - 較舊版本的裝置會自動忽略此檔案
+
+    主要用途：
+    - 指定要備份的資料（include）
+    - 排除不應備份的資料（exclude）
+    - 提升使用者在換機或重新安裝 App 時的資料保留體驗
+-->
+<!--
+    Sample backup rules file; uncomment and customize as necessary.
+    See https://developer.android.com/guide/topics/data/autobackup
+    for details.
+    Note: This file is ignored for devices older than API 31
+    See https://developer.android.com/about/versions/12/backup-restore
 -->
 <full-backup-content>
+
     <!--
-   <include domain="sharedpref" path="."/>
-   <exclude domain="sharedpref" path="device.xml"/>
--->
+        include / exclude 範例說明（目前為註解狀態，尚未啟用）
+
+        include：
+        - 指定要被備份的資料類型與路徑
+        - 例如 shared preferences、資料庫等
+
+        exclude：
+        - 指定不應被備份的資料
+        - 常用於排除裝置綁定設定、暫存資料或敏感資訊
+    -->
+
+    <!--
+        範例：備份所有 SharedPreferences
+        <include domain="sharedpref" path="."/>
+    -->
+
+    <!--
+        範例：排除特定 SharedPreferences 檔案
+        <exclude domain="sharedpref" path="device.xml"/>
+    -->
+
 </full-backup-content>

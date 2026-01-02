@@ -1,19 +1,63 @@
-<?xml version="1.0" encoding="utf-8"?><!--
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    data_extraction_rules.xml
+    功能說明：
+    此檔案為 Android 12（API 31）以上引入的
+   「Data Extraction Rules（資料擷取規則）」設定檔，
+    用來取代或補充舊有的 Auto Backup 規則。
+
+    主要用途：
+    - 精細控制 App 資料在不同備份情境下的行為
+    - 區分「雲端備份（cloud-backup）」與「裝置轉移（device-transfer）」
+    - 提升使用者換機、還原資料時的安全性與可控性
+
+    注意事項：
+    - 僅適用於 Android 12 以上裝置
+    - 需在 AndroidManifest.xml 中指定此檔案才會生效
+-->
+<!--
    Sample data extraction rules file; uncomment and customize as necessary.
    See https://developer.android.com/about/versions/12/backup-restore#xml-changes
    for details.
 -->
 <data-extraction-rules>
+
+    <!--
+        cloud-backup：雲端備份規則
+        - 控制資料是否可被備份至 Google 帳號雲端
+        - 常用於使用者設定、偏好值、非敏感資料
+        - 當使用者重新安裝 App 或換新裝置時可還原
+    -->
     <cloud-backup>
-        <!-- TODO: Use <include> and <exclude> to control what is backed up.
+
+        <!--
+            TODO：使用 include / exclude 來指定備份規則
+
+            include：
+            - 指定允許被雲端備份的資料
+            - 例如：SharedPreferences、資料庫檔案等
+
+            exclude：
+            - 指定不應被備份的資料
+            - 常用於排除暫存檔、裝置綁定資訊或敏感資料
+        -->
+        <!--
         <include .../>
         <exclude .../>
         -->
     </cloud-backup>
+
+    <!--
+        device-transfer：裝置轉移規則（目前為註解狀態）
+        - 用於裝置對裝置的資料轉移（例如使用線材或附近分享）
+        - 可與 cloud-backup 設定不同的備份策略
+        - 尚未啟用時不會影響 App 行為
+    -->
     <!--
     <device-transfer>
         <include .../>
         <exclude .../>
     </device-transfer>
     -->
+
 </data-extraction-rules>

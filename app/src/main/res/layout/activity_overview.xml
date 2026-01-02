@@ -1,4 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_overview.xml
+    功能說明：
+    本頁為「收信總覽 / 信箱」畫面，主要用途為：
+    1. 以月曆（MaterialCalendarView）呈現信件到期 / 收信日期的分佈
+    2. 於下方列表（RecyclerView）顯示信件清單（例如已到期、可閱讀的信件）
+    3. 提供「排序」功能按鈕，協助使用者切換列表顯示方式
+    4. 顯示載入中狀態（ProgressBar）與空資料狀態（emptyView）
+    5. 下方固定 BottomNavigationView，方便切換主要功能頁
+-->
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,6 +17,12 @@
     android:layout_height="match_parent"
     tools:context=".OverviewActivity">
 
+    <!--
+        MaterialToolbar：頁面上方工具列
+        - 顯示 App 名稱「信運草」
+        - 使用 Theme 中定義的主色與文字顏色，支援日夜模式
+        - 位置固定在最上方
+    -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar_overview"
         android:layout_width="0dp"
@@ -18,6 +34,14 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+    <!--
+        NestedScrollView：可捲動內容容器
+        為什麼用 NestedScrollView：
+        - 頁面同時包含「月曆 + RecyclerView」兩種較長內容元件
+        - 使用 NestedScrollView 能讓整頁（包含月曆與列表）一起捲動
+        - 下方保留 BottomNavigationView 的固定位置
+        - 上方接 Toolbar，下方接 BottomNavigationView
+    -->
     <androidx.core.widget.NestedScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -26,10 +50,22 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!--
+            內層 ConstraintLayout：實際排列月曆、標題、按鈕、列表等元件
+            - wrap_content：讓內容高度依元件數量決定
+            - 由外層 NestedScrollView 負責捲動
+        -->
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <!--
+                MaterialCalendarView：月曆元件
+                - 顯示月份/日期，作為「信件到期日 / 收信日期」的視覺入口
+                - mcv_selectionColor：選取日期的顏色（綠色系，符合主題）
+                - mcv_showOtherDates="all"：顯示非本月日期（提升連續性與可視範圍）
+                - tools:ignore="MissingClass"：避免預覽/編譯時提示缺少類別（常見於第三方元件）
+            -->
             <com.prolificinteractive.materialcalendarview.MaterialCalendarView
                 android:id="@+id/calendarView"
                 android:layout_width="0dp"
@@ -43,6 +79,11 @@
                 app:layout_constraintTop_toTopOf="parent"
                 tools:ignore="MissingClass" />
 
+            <!--
+                TextView：區塊標題「信箱」
+                - 作為月曆下方列表的段落標題
+                - 粗體 + 較大字體，建立清楚的視覺層級
+            -->
             <TextView
                 android:id="@+id/textView"
                 android:layout_width="wrap_content"
@@ -55,6 +96,13 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/calendarView" />
 
+            <!--
+                Button：排序
+                - 使用 TextButton 樣式（不強調實心按鈕，視覺較輕量）
+                - 放在標題「信箱」同一行的右側，形成標題列操作
+                - minHeight/minWidth 確保點擊區域符合基本可用性（避免太小不好按）
+                - 實際排序行為由 Activity/Adapter 控制（此 XML 僅負責 UI 擺放）
+            -->
             <Button
                 android:id="@+id/btnSort"
                 style="@style/Widget.MaterialComponents.Button.TextButton"
@@ -67,6 +115,14 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/textView" />
 
+            <!--
+                RecyclerView：信件列表
+                - 顯示信件清單（例如已到期可閱讀的信件）
+                - nestedScrollingEnabled="false"：
+                    因為外層已是 NestedScrollView，若 RecyclerView 也自己捲動會造成手勢衝突，
+                    因此關閉 RecyclerView 的內部捲動，交由外層統一捲動。
+                - tools:listitem / itemCount：僅供版面預覽，不影響實際資料
+            -->
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/lettersRecyclerView"
                 android:layout_width="0dp"
@@ -80,6 +136,12 @@
                 tools:itemCount="5"
                 tools:listitem="@layout/letter_item" />
 
+            <!--
+                ProgressBar：載入中狀態
+                - 預設為 gone（不佔空間）
+                - 當資料正在載入/查詢時顯示，提升使用者回饋
+                - 位置放在列表區塊中間，視覺上代表「內容正在載入」
+            -->
             <ProgressBar
                 android:id="@+id/progressBar"
                 style="?android:attr/progressBarStyle"
@@ -92,6 +154,12 @@
                 app:layout_constraintTop_toBottomOf="@+id/textView"
                 tools:visibility="visible" />
 
+            <!--
+                emptyView：空資料提示文字
+                - 當目前沒有已到期 / 可顯示的信件時顯示
+                - 預設為 gone，避免在有資料時干擾畫面
+                - 與 ProgressBar 放在同一個區域，視情況切換顯示（通常是三態：載入中 / 有資料 / 無資料）
+            -->
             <TextView
                 android:id="@+id/emptyView"
                 android:layout_width="wrap_content"
@@ -108,6 +176,12 @@
 
     </androidx.core.widget.NestedScrollView>
 
+    <!--
+        BottomNavigationView：底部導覽列
+        - 固定在畫面底部，不隨內容捲動
+        - menu 使用 bottom_nav_menu，提供主要頁面切換入口
+        - layout_height="wrap_content"：依元件本身高度顯示（與其他頁面保持一致）
+    -->
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/bottomNavigationView"
         android:layout_width="match_parent"

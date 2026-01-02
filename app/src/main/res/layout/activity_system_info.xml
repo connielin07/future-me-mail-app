@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
+<!--
+    activity_system_info.xml
+    功能說明：
+    本頁為「系統資訊」頁面，主要用於提供使用者與維護者
+    關於 App 基本資訊與技術背景的說明，包含：
+    1. App 版本資訊
+    2. 支援的 Android 系統版本
+    3. 使用的開發技術列表
+    此頁屬於資訊性頁面，不提供複雜互動，重點在清楚呈現與可讀性。
+-->
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <!-- 瀏海頁 Toolbar -->
+    <!--
+        MaterialToolbar：系統資訊頁的上方工具列
+        - 顯示頁面標題「系統資訊」
+        - navigationIcon 使用系統返回箭頭（homeAsUpIndicator）
+        - 方便使用者返回上一頁
+        - 背景與文字顏色統一由 Theme 控制，支援日夜模式
+    -->
     <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/toolbar"
         android:layout_width="0dp"
@@ -19,7 +35,12 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-    <!-- 內容區 -->
+    <!--
+        ScrollView：內容顯示區
+        - 用於包覆所有系統資訊文字
+        - 即使資訊內容增加，也能保持良好的捲動體驗
+        - 上方接 Toolbar，下方延伸至畫面底部
+    -->
     <ScrollView
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -28,12 +49,23 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent">
 
+        <!--
+            LinearLayout（垂直排列）
+            - 作為 ScrollView 內的實際內容容器
+            - 垂直排列各項系統資訊
+            - padding 提供閱讀時的留白空間，提升可讀性
+        -->
         <LinearLayout
             android:orientation="vertical"
             android:padding="20dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
+            <!--
+                TextView：App 版本資訊
+                - 顯示目前 App 的版本號
+                - 實際版本內容通常由程式碼動態填入
+            -->
             <TextView
                 android:id="@+id/tvVersion"
                 android:text="App 版本："
@@ -42,6 +74,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+            <!--
+                TextView：支援的 Android 系統版本
+                - 告知使用者最低支援的 Android 版本
+                - 有助於裝置相容性與使用者預期管理
+            -->
             <TextView
                 android:text="支援 Android 版本：Android 8.0 (API 26) 以上"
                 android:textSize="16sp"
@@ -49,6 +86,12 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content" />
 
+            <!--
+                TextView：技術列表
+                - 列出本 App 使用的主要開發技術
+                - 作為專題展示或維護說明的一部分
+                - 以換行與項目符號提升可讀性
+            -->
             <TextView
                 android:text="技術列表：\n• Kotlin\n• Android Studio\n• Material Design\n• ViewBinding"
                 android:textSize="16sp"
