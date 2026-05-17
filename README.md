@@ -61,12 +61,14 @@ Scheduled task / notification workflow
     ↓
 Firebase Cloud Messaging / Email
 
-## Course Connection
-| Course | Connection |
-| Mobile App Development | Kotlin Android app, activity flow, notification permission, FCM |
-| Web Fundamentals | REST API, HTTP request / response, JSON data exchange |
-| Database Systems | Store future mail records in MySQL / MariaDB |
-| Software Project Practice	| Team collaboration, Git workflow, frontend-backend integration |
+## Demo
+
+- [Video](https://reurl.cc/jmalvy)
+
+## Docs
+
+- [Report](https://docs.google.com/document/d/1FDA-Yr5ck-3UhqH9ynpLNdpzo8fJfy7Uy2mrFMYucTI/edit?usp=sharing)
+- [Presentation](https://canva.link/naqaftayvolv7hw)
 
 ## My Contributions
 - UI / app flow planning
@@ -75,13 +77,15 @@ Firebase Cloud Messaging / Email
 - API integration discussion
 - Notification and future mail workflow planning
 - Git-based team collaboration
+  
+## Course Connection
 
-## demo
-- [video](https://reurl.cc/jmalvy)
-
-## docs
-- [reports](https://docs.google.com/document/d/1FDA-Yr5ck-3UhqH9ynpLNdpzo8fJfy7Uy2mrFMYucTI/edit?usp=sharing)
-- [Canva presentation](https://canva.link/naqaftayvolv7hw)
+| Course | Connection |
+|---|---|
+| Mobile App Development | Kotlin Android app, activity flow, notification permission, FCM |
+| Web Fundamentals | REST API, HTTP request / response, JSON data exchange |
+| Database Systems | Store future mail records in MySQL / MariaDB |
+| Software Project Practice	| Team collaboration, Git workflow, frontend-backend integration |
 
 ## What I Learned
 
